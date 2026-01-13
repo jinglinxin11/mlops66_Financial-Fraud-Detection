@@ -1,6 +1,7 @@
 name: "Run tests"
 
-on: #Only triggers when pushing or creating Pull Requests to master/main.
+# Only triggers when pushing or creating Pull Requests to master/main.
+on:
     #If working inside another branch, tests must be triggered manually.
   push:
     branches: [ master, main ]
@@ -40,7 +41,4 @@ jobs:
     - name: Test with pytest
       run: |
         coverage run -m pytest tests/
-        coverage report -m
-# pytest -v
-
-# Can be made to run with coverage in the future if needed, but requires that coveco.io is set up among all contributors.
+# TODO: Keep this as an example command for running pytest in verbose mode locally: pytest -v
