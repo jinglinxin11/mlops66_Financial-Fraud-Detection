@@ -1,6 +1,5 @@
-"""
-Evaluation Metrics Module
-Calculate model performance metrics
+"""Evaluation Metrics Module
+Calculate model performance metrics.
 """
 
 import pandas as pd
@@ -8,8 +7,7 @@ from sklearn.metrics import roc_auc_score, classification_report, confusion_matr
 
 
 def evaluate_model(model, X_test, y_test, feature_columns=None, verbose=True):
-    """
-    Evaluate model performance
+    """Evaluate model performance.
     
     Args:
         model: Trained model
@@ -62,8 +60,7 @@ def evaluate_model(model, X_test, y_test, feature_columns=None, verbose=True):
 
 
 def get_feature_importance(model, feature_columns):
-    """
-    Get feature importance
+    """Get feature importance.
     
     Args:
         model: Trained model

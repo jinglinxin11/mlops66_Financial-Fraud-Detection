@@ -1,12 +1,10 @@
-"""
-Time Feature Extraction Module
-Extract meaningful time features from TransactionDT
+"""Time Feature Extraction Module
+Extract meaningful time features from TransactionDT.
 """
 
 
 def extract_time_features(df, time_col='TransactionDT', verbose=True):
-    """
-    Extract time features from timestamp
+    """Extract time features from timestamp.
     
     Args:
         df: DataFrame

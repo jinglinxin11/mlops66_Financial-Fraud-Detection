@@ -1,5 +1,4 @@
-"""
-IEEE-CIS Fraud Detection - TabNet Training Entry Script
+"""IEEE-CIS Fraud Detection - TabNet Training Entry Script.
 
 Usage:
     python train.py
@@ -16,7 +15,7 @@ from src.evaluation.uncertainty import UncertaintyAnalyzer
 
 
 def main():
-    """Main training workflow"""
+    """Main training workflow."""
     print("\n" + "=" * 60)
     print("     IEEE-CIS Fraud Detection - TabNet Training")
     print("=" * 60)

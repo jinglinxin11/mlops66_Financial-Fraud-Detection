@@ -1,6 +1,5 @@
-"""
-Feature Encoding Module
-Handles encoding of categorical and numerical features
+"""Feature Encoding Module
+Handles encoding of categorical and numerical features.
 """
 
 import numpy as np
@@ -8,13 +7,12 @@ from sklearn.preprocessing import LabelEncoder
 
 
 class FeatureEncoder:
-    """Feature Encoder"""
+    """Feature Encoder."""
     
     def __init__(self, rare_category_threshold=100, verbose=True):
-        """
-        Args:
-            rare_category_threshold: Rare category threshold
-            verbose: Whether to print information
+        """Args:
+        rare_category_threshold: Rare category threshold
+        verbose: Whether to print information.
         """
         self.rare_category_threshold = rare_category_threshold
         self.verbose = verbose
@@ -29,13 +27,12 @@ class FeatureEncoder:
         self.cat_dims = []
     
     def _log(self, message):
-        """Print log message"""
+        """Print log message."""
         if self.verbose:
             print(message)
     
     def identify_feature_types(self, df, target='isFraud', exclude_cols=None):
-        """
-        Identify feature types
+        """Identify feature types.
         
         Args:
             df: DataFrame
@@ -76,8 +73,7 @@ class FeatureEncoder:
         return self.feature_columns
     
     def handle_rare_categories(self, df):
-        """
-        Handle rare categories
+        """Handle rare categories.
         
         Args:
             df: DataFrame
@@ -103,8 +99,7 @@ class FeatureEncoder:
         return df
     
     def fit_transform(self, df):
-        """
-        Fit and transform features (training set)
+        """Fit and transform features (training set).
         
         Args:
             df: DataFrame
@@ -147,8 +142,7 @@ class FeatureEncoder:
         return df
     
     def transform(self, df):
-        """
-        Transform features (test set)
+        """Transform features (test set).
         
         Args:
             df: DataFrame
@@ -187,7 +181,7 @@ class FeatureEncoder:
         return df
     
     def get_state(self):
-        """Get encoder state for saving"""
+        """Get encoder state for saving."""
         return {
             'label_encoders': self.label_encoders,
             'numerical_medians': self.numerical_medians,
@@ -200,7 +194,7 @@ class FeatureEncoder:
         }
     
     def load_state(self, state):
-        """Restore encoder from saved state"""
+        """Restore encoder from saved state."""
         self.label_encoders = state['label_encoders']
         self.numerical_medians = state['numerical_medians']
         self.categorical_modes = state['categorical_modes']

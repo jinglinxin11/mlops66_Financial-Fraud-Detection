@@ -1,5 +1,4 @@
-"""
-IEEE-CIS Fraud Detection - Prediction Entry Script
+"""IEEE-CIS Fraud Detection - Prediction Entry Script.
 
 Usage:
     python predict.py
@@ -21,8 +20,7 @@ from src.models.tabnet_trainer import TabNetTrainer
 
 
 def predict_test():
-    """Make predictions on test set"""
-    
+    """Make predictions on test set."""
     print("\n" + "=" * 60)
     print("     Predicting on Test Set")
     print("=" * 60)

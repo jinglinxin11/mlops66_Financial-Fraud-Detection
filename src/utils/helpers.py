@@ -1,6 +1,5 @@
-"""
-Utility Functions Module
-Common helper functions
+"""Utility Functions Module
+Common helper functions.
 """
 
 import os
@@ -8,8 +7,7 @@ import glob
 
 
 def optimize_memory(df, verbose=True):
-    """
-    Optimize DataFrame memory usage
+    """Optimize DataFrame memory usage.
     
     Args:
         df: pandas DataFrame
@@ -41,8 +39,7 @@ def optimize_memory(df, verbose=True):
 
 
 def find_latest_checkpoint(checkpoint_dir):
-    """
-    Find the latest checkpoint
+    """Find the latest checkpoint.
     
     Args:
         checkpoint_dir: Checkpoint directory path

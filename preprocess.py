@@ -1,5 +1,4 @@
-"""
-IEEE-CIS Fraud Detection - Data Preprocessing Entry Script
+"""IEEE-CIS Fraud Detection - Data Preprocessing Entry Script.
 
 Usage:
     python preprocess.py              # Preprocess training data
@@ -17,7 +16,7 @@ from src.features.preprocessor import FraudPreprocessor
 
 
 def analyze_data(config):
-    """Analyze data quality only"""
+    """Analyze data quality only."""
     print("\n" + "=" * 60)
     print("     IEEE-CIS Fraud Detection - Data Quality Analysis")
     print("=" * 60)
@@ -34,7 +33,7 @@ def analyze_data(config):
 
 
 def preprocess_train(config):
-    """Preprocess training data"""
+    """Preprocess training data."""
     print("\n" + "=" * 60)
     print("     IEEE-CIS Fraud Detection - Training Data Preprocessing")
     print("=" * 60)
@@ -57,7 +56,7 @@ def preprocess_train(config):
 
 
 def preprocess_test(config):
-    """Preprocess test data (for Kaggle submission)"""
+    """Preprocess test data (for Kaggle submission)."""
     print("\n" + "=" * 60)
     print("     IEEE-CIS Fraud Detection - Test Data Preprocessing")
     print("=" * 60)

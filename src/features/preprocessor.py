@@ -1,6 +1,5 @@
-"""
-Main Preprocessor Module
-Coordinates data loading, feature engineering, and encoding workflow
+"""Main Preprocessor Module
+Coordinates data loading, feature engineering, and encoding workflow.
 """
 
 import numpy as np
@@ -15,13 +14,12 @@ from ..utils.helpers import optimize_memory
 
 
 class FraudPreprocessor:
-    """Fraud Detection Data Preprocessor"""
+    """Fraud Detection Data Preprocessor."""
     
     def __init__(self, config, verbose=True):
-        """
-        Args:
-            config: Configuration object
-            verbose: Whether to print detailed information
+        """Args:
+        config: Configuration object
+        verbose: Whether to print detailed information.
         """
         self.config = config
         self.verbose = verbose
@@ -35,12 +33,12 @@ class FraudPreprocessor:
         self.drop_columns = []
     
     def _log(self, message):
-        """Print log message"""
+        """Print log message."""
         if self.verbose:
             print(message)
     
     def _remove_high_missing_columns(self, df, target='isFraud'):
-        """Remove columns with high missing rate"""
+        """Remove columns with high missing rate."""
         self._log("\n" + "=" * 50)
         self._log("Removing High Missing Columns")
         self._log("=" * 50)
@@ -64,7 +62,7 @@ class FraudPreprocessor:
         return df
     
     def _split_data(self, df, target='isFraud', test_size=0.2, valid_size=0.125):
-        """Split dataset"""
+        """Split dataset."""
         self._log("\n" + "=" * 50)
         self._log("Splitting Dataset")
         self._log("=" * 50)
@@ -108,8 +106,7 @@ class FraudPreprocessor:
         return X_train, X_valid, X_test, y_train, y_valid, y_test
     
     def fit_transform(self, transaction_path=None, identity_path=None, target='isFraud'):
-        """
-        Complete preprocessing workflow (training set)
+        """Complete preprocessing workflow (training set).
         
         Args:
             transaction_path: Path to transaction data (defaults to config path)
@@ -174,8 +171,7 @@ class FraudPreprocessor:
         }
     
     def transform(self, transaction_path=None, identity_path=None):
-        """
-        Process test set data (for Kaggle submission)
+        """Process test set data (for Kaggle submission).
         
         Args:
             transaction_path: Path to test transaction data
@@ -242,7 +238,7 @@ class FraudPreprocessor:
         }
     
     def save(self, path=None):
-        """Save preprocessor state"""
+        """Save preprocessor state."""
         path = path or self.config.PREPROCESSOR_PATH
         
         state = {
@@ -256,7 +252,7 @@ class FraudPreprocessor:
         self._log(f"Preprocessor saved to: {path}")
     
     def load(self, path=None):
-        """Load preprocessor state"""
+        """Load preprocessor state."""
         path = path or self.config.PREPROCESSOR_PATH
         
         with open(path, 'rb') as f:

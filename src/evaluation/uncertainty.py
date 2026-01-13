@@ -1,18 +1,16 @@
-"""
-Uncertainty Analysis Module
-Analyze prediction confidence and uncertainty
+"""Uncertainty Analysis Module
+Analyze prediction confidence and uncertainty.
 """
 
 import numpy as np
 
 
 class UncertaintyAnalyzer:
-    """Uncertainty Analyzer"""
+    """Uncertainty Analyzer."""
     
     def __init__(self, thresholds=None):
-        """
-        Args:
-            thresholds: Risk threshold dictionary
+        """Args:
+        thresholds: Risk threshold dictionary.
         """
         self.thresholds = thresholds or {
             'high_risk': 0.8,
@@ -22,8 +20,7 @@ class UncertaintyAnalyzer:
         }
     
     def analyze(self, proba, y_true=None, verbose=True):
-        """
-        Analyze prediction uncertainty
+        """Analyze prediction uncertainty.
         
         Args:
             proba: Prediction probabilities
@@ -79,7 +76,7 @@ class UncertaintyAnalyzer:
         }
     
     def _print_threshold_analysis(self, proba, y_true):
-        """Print performance at different thresholds"""
+        """Print performance at different thresholds."""
         print("\nPerformance at Different Thresholds:")
         print("-" * 50)
         print(f"{'Threshold':<10} {'Pred Fraud':<12} {'Precision':<10} {'Recall':<10}")
@@ -96,8 +93,7 @@ class UncertaintyAnalyzer:
             print(f"{threshold:<10} {(tp+fp):<12,} {precision*100:>7.1f}%   {recall*100:>7.1f}%")
     
     def get_risk_level(self, proba):
-        """
-        Get risk level for each sample
+        """Get risk level for each sample.
         
         Args:
             proba: Prediction probabilities

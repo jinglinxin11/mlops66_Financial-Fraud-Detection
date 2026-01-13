@@ -1,6 +1,5 @@
-"""
-Configuration Module
-Centralized management of all configuration parameters
+"""Configuration Module
+Centralized management of all configuration parameters.
 """
 
 import torch
@@ -8,7 +7,7 @@ from pathlib import Path
 
 
 class Config:
-    """Project configuration class"""
+    """Project configuration class."""
     
     # ============================================================
     # Path Configuration
@@ -89,7 +88,7 @@ class Config:
     }
     
     def __init__(self, **kwargs):
-        """Allow overriding default configuration via keyword arguments"""
+        """Allow overriding default configuration via keyword arguments."""
         for key, value in kwargs.items():
             if hasattr(self, key):
                 setattr(self, key, value)
@@ -100,7 +99,7 @@ class Config:
         return f"Config(DEVICE={self.DEVICE}, MAX_EPOCHS={self.MAX_EPOCHS})"
     
     def to_dict(self):
-        """Return configuration as dictionary"""
+        """Return configuration as dictionary."""
         return {
             key: getattr(self, key) 
             for key in dir(self) 

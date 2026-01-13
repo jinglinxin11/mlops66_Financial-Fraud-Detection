@@ -1,6 +1,5 @@
-"""
-Data Loading Module
-Responsible for loading and merging IEEE-CIS dataset
+"""Data Loading Module
+Responsible for loading and merging IEEE-CIS dataset.
 """
 
 import pandas as pd
@@ -9,23 +8,21 @@ from pathlib import Path
 
 
 class DataLoader:
-    """IEEE-CIS Data Loader"""
+    """IEEE-CIS Data Loader."""
     
     def __init__(self, verbose=True):
-        """
-        Args:
-            verbose: Whether to print loading information
+        """Args:
+        verbose: Whether to print loading information.
         """
         self.verbose = verbose
     
     def _log(self, message):
-        """Print log message"""
+        """Print log message."""
         if self.verbose:
             print(message)
     
     def load_transaction(self, path):
-        """
-        Load transaction data
+        """Load transaction data.
         
         Args:
             path: Path to transaction.csv file
@@ -44,8 +41,7 @@ class DataLoader:
         return df
     
     def load_identity(self, path):
-        """
-        Load identity data
+        """Load identity data.
         
         Args:
             path: Path to identity.csv file
@@ -65,8 +61,7 @@ class DataLoader:
         return df
     
     def load_and_merge(self, transaction_path, identity_path=None):
-        """
-        Load and merge transaction and identity data
+        """Load and merge transaction and identity data.
         
         Args:
             transaction_path: Path to transaction.csv file
@@ -94,8 +89,7 @@ class DataLoader:
         return df
     
     def analyze(self, df, target='isFraud'):
-        """
-        Data quality analysis report
+        """Data quality analysis report.
         
         Args:
             df: DataFrame

@@ -1,4 +1,4 @@
-"""特征工程模块"""
+"""特征工程模块."""
 
 from .preprocessor import FraudPreprocessor
 from .time_features import extract_time_features
