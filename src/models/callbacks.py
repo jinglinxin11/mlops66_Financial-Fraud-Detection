@@ -1,4 +1,5 @@
-"""Training Callbacks Module
+"""Training Callbacks Module.
+
 Defines callback functions for TabNet training process.
 """
 
@@ -11,9 +12,11 @@ class CheckpointCallback(Callback):
     """Callback to save checkpoints every N epochs."""
     
     def __init__(self, save_path, save_every=10):
-        """Args:
-        save_path: Checkpoint save directory
-        save_every: Save checkpoint every N epochs.
+        """Initialize CheckpointCallback.
+        
+        Args:
+            save_path: Checkpoint save directory
+            save_every: Save checkpoint every N epochs.
         """
         super().__init__()
         self.save_path = save_path

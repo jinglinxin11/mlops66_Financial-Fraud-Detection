@@ -1,4 +1,5 @@
-"""Evaluation Metrics Module
+"""Evaluation Metrics Module.
+
 Calculate model performance metrics.
 """
 

@@ -81,6 +81,7 @@ def preprocess_test(config):
 
 
 def main():
+    """Main entry point."""
     parser = argparse.ArgumentParser(description='IEEE-CIS Data Preprocessing Tool')
     parser.add_argument('--test', action='store_true', 
                         help='Preprocess test data (for Kaggle submission)')

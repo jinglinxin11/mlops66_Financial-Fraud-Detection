@@ -1,4 +1,5 @@
-"""Data Loading Module
+"""Data Loading Module.
+
 Responsible for loading and merging IEEE-CIS dataset.
 """
 
@@ -11,7 +12,9 @@ class DataLoader:
     """IEEE-CIS Data Loader."""
     
     def __init__(self, verbose=True):
-        """Args:
+        """Initialize the DataLoader.
+        
+        Args:
         verbose: Whether to print loading information.
         """
         self.verbose = verbose

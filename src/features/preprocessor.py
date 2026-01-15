@@ -1,4 +1,5 @@
-"""Main Preprocessor Module
+"""Main Preprocessor Module.
+
 Coordinates data loading, feature engineering, and encoding workflow.
 """
 
@@ -17,9 +18,11 @@ class FraudPreprocessor:
     """Fraud Detection Data Preprocessor."""
     
     def __init__(self, config, verbose=True):
-        """Args:
-        config: Configuration object
-        verbose: Whether to print detailed information.
+        """Initialize FraudPreprocessor.
+        
+        Args:
+            config: Configuration object
+            verbose: Whether to print detailed information.
         """
         self.config = config
         self.verbose = verbose

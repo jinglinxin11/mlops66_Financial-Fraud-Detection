@@ -1,4 +1,5 @@
-"""Uncertainty Analysis Module
+"""Uncertainty Analysis Module.
+
 Analyze prediction confidence and uncertainty.
 """
 
@@ -9,8 +10,10 @@ class UncertaintyAnalyzer:
     """Uncertainty Analyzer."""
     
     def __init__(self, thresholds=None):
-        """Args:
-        thresholds: Risk threshold dictionary.
+        """Initialize UncertaintyAnalyzer.
+
+        Args:
+            thresholds: Risk threshold dictionary.
         """
         self.thresholds = thresholds or {
             'high_risk': 0.8,

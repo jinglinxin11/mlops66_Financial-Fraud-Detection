@@ -1,8 +1,9 @@
+"""Report Generation Module."""
+
 # run following commands to install requirements
 # pip install typer markdown pydantic loguru
 # or
 # uv add typer markdown pydantic loguru
-
 import re
 from pathlib import Path
 
@@ -10,7 +11,6 @@ import markdown
 import pydantic
 import typer
 from loguru import logger
-
 
 class Constraints(pydantic.BaseModel):
     """Base class for constraints."""

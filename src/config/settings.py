@@ -1,4 +1,5 @@
-"""Configuration Module
+"""Configuration Module.
+
 Centralized management of all configuration parameters.
 """
 
@@ -96,6 +97,7 @@ class Config:
                 raise ValueError(f"Unknown configuration key: {key}")
     
     def __repr__(self):
+        """String representation of the configuration."""
         return f"Config(DEVICE={self.DEVICE}, MAX_EPOCHS={self.MAX_EPOCHS})"
     
     def to_dict(self):

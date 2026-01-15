@@ -1,4 +1,5 @@
-"""Utility Functions Module
+"""Utility Functions Module.
+
 Common helper functions.
 """
 

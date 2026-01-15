@@ -1,4 +1,5 @@
-"""Time Feature Extraction Module
+"""Time Feature Extraction Module.
+
 Extract meaningful time features from TransactionDT.
 """
 

@@ -1,4 +1,5 @@
-"""Feature Encoding Module
+"""Feature Encoding Module.
+
 Handles encoding of categorical and numerical features.
 """
 
@@ -10,9 +11,11 @@ class FeatureEncoder:
     """Feature Encoder."""
     
     def __init__(self, rare_category_threshold=100, verbose=True):
-        """Args:
-        rare_category_threshold: Rare category threshold
-        verbose: Whether to print information.
+        """Initialize FeatureEncoder.
+
+        Args:
+            rare_category_threshold: Rare category threshold
+            verbose: Whether to print information.
         """
         self.rare_category_threshold = rare_category_threshold
         self.verbose = verbose

@@ -1,1 +1,6 @@
 /.ruff_cache*
+# Add ignore to ~/__pycache__ folders
+__pycache__/
+*.pyc
+src/**/__pycache__/
+src/__pycache__

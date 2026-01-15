@@ -1,4 +1,5 @@
-"""TabNet Trainer Module
+"""TabNet Trainer Module.
+
 Encapsulates TabNet model creation, training, saving, and loading logic.
 """
 
@@ -13,10 +14,12 @@ class TabNetTrainer:
     """TabNet Model Trainer."""
     
     def __init__(self, config, data, verbose=True):
-        """Args:
-        config: Configuration object
-        data: Preprocessed data dictionary
-        verbose: Whether to print detailed information.
+        """Initialize TabNetTrainer.
+        
+        Args:
+            config: Configuration object
+            data: Preprocessed data dictionary
+            verbose: Whether to print detailed information.
         """
         self.config = config
         self.data = data
