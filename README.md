@@ -1,9 +1,8 @@
 <<<<<<< HEAD
-# mlops66_Financial-Fraud-Detection
-=======
 # IEEE-CIS Fraud Detection with TabNet
 
-A financial fraud detection system using TabNet deep learning model for the [IEEE-CIS Fraud Detection Kaggle Competition](https://www.kaggle.com/c/ieee-fraud-detection).
+A financial fraud detection system using TabNet deep learning model for the
+[IEEE-CIS Fraud Detection Kaggle Competition](https://www.kaggle.com/c/ieee-fraud-detection).
 
 ## ✨ Features
 
@@ -12,53 +11,66 @@ A financial fraud detection system using TabNet deep learning model for the [IEE
 - 🔄 **Checkpoint Support** - Resume training from interruption
 - 📈 **Uncertainty Analysis** - Prediction confidence stratification
 - 🎯 **Class Imbalance Handling** - Automatic class weight calculation
+- 🌐 **FastAPI Inference API (M22)** - Run inference through a simple API endpoint
 
 ## 📁 Project Structure
 
-```
-mlops_66/
-├── train.py              # Training entry point
-├── predict.py            # Prediction entry point
-├── preprocess.py         # Data preprocessing entry point
-├── src/                  # Modular source code
-│   ├── config/           # Configuration module
-│   │   └── settings.py
-│   ├── data/             # Data loading module
-│   │   └── loader.py
-│   ├── features/         # Feature engineering module
-│   │   ├── preprocessor.py
-│   │   ├── encoders.py
-│   │   └── time_features.py
-│   ├── models/           # Model module
-│   │   ├── tabnet_trainer.py
-│   │   └── callbacks.py
-│   ├── evaluation/       # Evaluation module
-│   │   ├── metrics.py
-│   │   └── uncertainty.py
-│   └── utils/            # Utility module
-│       └── helpers.py
-├── data/                 # Dataset directory
-└── checkpoints/          # Model checkpoints
-```
+mlops66_Financial-Fraud-Detection/
+├── train.py # Training entry point
+├── predict.py # Prediction entry point (Kaggle submission)
+├── preprocess.py # Data preprocessing entry point
+├── api/ # FastAPI application
+│ ├── init.py
+│ ├── main.py
+│ └── schemas.py
+├── src/ # Modular source code
+│ ├── config/ # Configuration module
+│ │ └── settings.py
+│ ├── data/ # Data loading module
+│ │ └── loader.py
+│ ├── features/ # Feature engineering module
+│ │ ├── preprocessor.py
+│ │ ├── encoders.py
+│ │ └── time_features.py
+│ ├── models/ # Model module
+│ │ ├── tabnet_trainer.py
+│ │ └── callbacks.py
+│ ├── evaluation/ # Evaluation module
+│ │ ├── metrics.py
+│ │ └── uncertainty.py
+│ └── utils/ # Utility module
+│ └── helpers.py
+├── data/ # Dataset directory (Kaggle files go here)
+├── checkpoints/ # Model checkpoints
+├── ieee_cis_preprocessor.pkl
+└── tabnet_fraud_model.zip
+
+shell
+Copy code
 
 ## 🚀 Quick Start
 
-### 1. Environment Setup
+### 1) Environment Setup
 
 ```bash
-conda create -n mlops python=3.9
-conda activate mlops
-pip install pytorch-tabnet pandas numpy scikit-learn
-```
+pip install -r requirements.txt
+2) Data Preparation
+Download the Kaggle IEEE-CIS dataset and place these files in data/:
 
-### 2. Data Preparation
+train_transaction.csv
 
-Place IEEE-CIS dataset in `data/` directory.
+train_identity.csv
 
-### 3. Run
+test_transaction.csv
 
-```bash
-# Analyze data quality
+test_identity.csv
+
+sample_submission.csv
+
+3) Run
+bash
+Copy code
+# Analyze data quality (optional)
 python preprocess.py --analyze
 
 # Preprocess data
@@ -69,60 +81,37 @@ python train.py
 
 # Predict (Kaggle submission)
 python predict.py
-```
+🌐 FastAPI Inference API (M22)
+Start the server
+bash
+Copy code
+python -m uvicorn api.main:app --reload
+Swagger docs:
 
-## 📖 Usage
+http://127.0.0.1:8000/docs
 
-### Data Preprocessing
+Run inference (demo endpoint)
+This endpoint runs preprocessing + TabNet inference on the Kaggle test set and returns the first limit predictions:
 
-```python
-from src.config.settings import Config
-from src.features.preprocessor import FraudPreprocessor
+h
+Copy code
+POST /predict_test?limit=5
+Example response includes:
 
-config = Config()
-preprocessor = FraudPreprocessor(config)
-data = preprocessor.fit_transform()
-preprocessor.save()
-```
+TransactionID
 
-### Model Training
+fraud_probability
 
-```python
-from src.models.tabnet_trainer import TabNetTrainer
+is_fraud
 
-trainer = TabNetTrainer(config, data)
-model = trainer.train()
-```
+⚙️ Configuration
+Modify parameters in src/config/settings.py.
 
-### Model Evaluation
+📊 Model Performance
+Test AUC: ~0.81
 
-```python
-from src.evaluation.metrics import evaluate_model
-from src.evaluation.uncertainty import UncertaintyAnalyzer
+Top 5 Features: V230, P_emaildomain, M6, id_11, V154
 
-results = evaluate_model(model, X_test, y_test, feature_columns)
-analyzer = UncertaintyAnalyzer()
-uncertainty = analyzer.analyze(results['proba'], y_test)
-```
-
-## ⚙️ Configuration
-
-Modify parameters in `src/config/settings.py`:
-
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `MAX_EPOCHS` | 100 | Maximum training epochs |
-| `PATIENCE` | 10 | Early stopping patience |
-| `BATCH_SIZE` | 1024 | Batch size |
-| `CHECKPOINT_EVERY` | 10 | Checkpoint save interval |
-| `RESUME_TRAINING` | True | Resume from checkpoint |
-
-## 📊 Model Performance
-
-- **Test AUC**: ~0.81
-- **Top 5 Features**: V230, P_emaildomain, M6, id_11, V154
-
-## 📝 License
-
+📝 License
 MIT License
 >>>>>>> feb34cc (initial commit)

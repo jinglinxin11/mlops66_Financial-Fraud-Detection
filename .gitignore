@@ -3,3 +3,12 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+# Data files (Kaggle)
+data/*.csv
+
+# Generated outputs
+submission.csv
+
+# Model artifacts / checkpoints
+checkpoints/
+tabnet_fraud_model.zip
