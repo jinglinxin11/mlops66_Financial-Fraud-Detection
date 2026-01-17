@@ -3,6 +3,7 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+
 # Data files (Kaggle)
 data/*.csv
 
@@ -12,3 +13,32 @@ submission.csv
 # Model artifacts / checkpoints
 checkpoints/
 tabnet_fraud_model.zip
+*.pkl
+*.zip
+*.pt
+*.pth
+
+
+# Data directory
+data/
+
+# Output files
+submission.csv
+report.html
+
+# Environment files
+.env
+.venv
+env/
+venv/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db

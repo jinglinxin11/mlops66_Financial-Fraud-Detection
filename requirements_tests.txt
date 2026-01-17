@@ -1,1 +1,3 @@
-# Leave empty if no test-specific dependencies are needed
+# Testing dependencies
+pytest>=7.0.0
+coverage>=7.0.0

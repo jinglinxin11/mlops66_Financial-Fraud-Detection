@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # IEEE-CIS Fraud Detection with TabNet
 
 A financial fraud detection system using TabNet deep learning model for the
@@ -103,6 +103,13 @@ TransactionID
 fraud_probability
 
 is_fraud
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `MAX_EPOCHS` | 100 | Maximum training epochs |
+| `PATIENCE` | 10 | Early stopping patience |
+| `BATCH_SIZE` | 8192 | Batch size |
+| `CHECKPOINT_EVERY` | 10 | Checkpoint save interval |
+| `RESUME_TRAINING` | True | Resume from checkpoint |
 
 ⚙️ Configuration
 Modify parameters in src/config/settings.py.
@@ -114,4 +121,4 @@ Top 5 Features: V230, P_emaildomain, M6, id_11, V154
 
 📝 License
 MIT License
->>>>>>> feb34cc (initial commit)
+
