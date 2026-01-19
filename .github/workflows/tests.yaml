@@ -13,7 +13,7 @@ permissions: #Suggestion from https://github.com/actions/setup-python#caching-pa
   actions: read #For using actions/checkout and actions/setup-python.
 
 jobs:
-  build:
+  pytest-test: 
     runs-on: ${{ matrix.os }}
     strategy:
         fail-fast: false #Continue running all jobs even if one fails.
