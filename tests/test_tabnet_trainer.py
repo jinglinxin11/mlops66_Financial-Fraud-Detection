@@ -1,9 +1,10 @@
 """Tests for TabNetTrainer."""
 
-import pytest
+from unittest.mock import MagicMock, patch
+
 import numpy as np
-import torch
-from unittest.mock import MagicMock, patch, ANY
+import pytest
+
 from src.models.tabnet_trainer import TabNetTrainer
 
 
@@ -58,12 +59,8 @@ def trainer(mock_config, mock_data):
 
 def test_init(trainer, mock_config, mock_data):
     """Test initialization."""
-    assert trainer.config == mock_config, (
-        "Config object should be correctly stored in trainer"
-    )
-    assert trainer.data == mock_data, (
-        "Data dictionary should be correctly stored in trainer"
-    )
+    assert trainer.config == mock_config, "Config object should be correctly stored in trainer"
+    assert trainer.data == mock_data, "Data dictionary should be correctly stored in trainer"
     assert trainer.model is None, "Model should be initialized as None before creation"
     assert trainer.verbose is False, "Verbose flag should be set correctly"
 
@@ -83,14 +80,11 @@ def test_create_model_params(MockClassifier, trainer):
     assert kwargs["n_a"] == trainer.config.N_A, (
         f"Model initialized with wrong n_a. Expected {trainer.config.N_A}, got {kwargs['n_a']}"
     )
-    assert kwargs["cat_idxs"] == trainer.data["cat_idxs"], (
-        "Model initialized with wrong cat_idxs"
-    )
-    assert kwargs["cat_dims"] == trainer.data["cat_dims"], (
-        "Model initialized with wrong cat_dims"
-    )
-    assert kwargs["mask_type"] == trainer.config.MASK_TYPE, (
-        f"Model initialized with wrong mask_type. Expected {trainer.config.MASK_TYPE}, got {kwargs['mask_type']}"
+    assert kwargs["cat_idxs"] == trainer.data["cat_idxs"], "Model initialized with wrong cat_idxs"
+    assert kwargs["cat_dims"] == trainer.data["cat_dims"], "Model initialized with wrong cat_dims"
+    expected_mask = trainer.config.MASK_TYPE
+    assert kwargs["mask_type"] == expected_mask, (
+        f"Model initialized with wrong mask_type. Expected {expected_mask}"
     )
 
 
@@ -124,17 +118,13 @@ def test_train_from_scratch(MockCallback, MockClassifier, trainer):
         save_path=str(trainer.config.CHECKPOINT_DIR),
         save_every=trainer.config.CHECKPOINT_EVERY,
     )
-    assert len(call_args["callbacks"]) > 0, (
-        "Callbacks list passed to fit should not be empty"
-    )
+    assert len(call_args["callbacks"]) > 0, "Callbacks list passed to fit should not be empty"
 
 
 @patch("src.models.tabnet_trainer.find_latest_checkpoint")
 @patch("src.models.tabnet_trainer.TabNetClassifier")
 @patch("src.models.tabnet_trainer.CheckpointCallback")
-def test_train_resume_success(
-    MockCallback, MockClassifier, mock_find_checkpoint, trainer
-):
+def test_train_resume_success(MockCallback, MockClassifier, mock_find_checkpoint, trainer):
     """Test resuming training from a checkpoint."""
     # Setup
     trainer.config.RESUME_TRAINING = True
@@ -156,12 +146,11 @@ def test_train_resume_success(
     mock_model.fit.assert_called_once()
     call_args = mock_model.fit.call_args[1]
 
-    assert call_args["max_epochs"] == expected_remaining, (
-        f"Resumed training should run for {expected_remaining} epochs, got {call_args['max_epochs']}"
+    actual_epochs = call_args["max_epochs"]
+    assert actual_epochs == expected_remaining, (
+        f"Resumed training should run for {expected_remaining} epochs, got {actual_epochs}"
     )
-    assert call_args["warm_start"] is True, (
-        "Resumed training should set warm_start=True"
-    )
+    assert call_args["warm_start"] is True, "Resumed training should set warm_start=True"
 
 
 @patch("src.models.tabnet_trainer.find_latest_checkpoint")
@@ -210,7 +199,7 @@ def test_save_load(trainer):
         # Need 'dict' access for MockClassifier().load_model call inside class
         new_mock_model = MockClassifier.return_value
 
-        loaded_model = trainer.load("custom_path.zip")
+        trainer.load("custom_path.zip")
 
         MockClassifier.assert_called_once()
         new_mock_model.load_model.assert_called_with("custom_path.zip")

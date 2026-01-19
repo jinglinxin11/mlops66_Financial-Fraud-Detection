@@ -1,10 +1,9 @@
 """Tests for helper functions."""
 
-import pytest
-import pandas as pd
 import numpy as np
-import os
-from src.utils.helpers import optimize_memory, find_latest_checkpoint
+import pandas as pd
+
+from src.utils.helpers import find_latest_checkpoint, optimize_memory
 
 # -----------------------------------------------------------------------------
 # optimize_memory Tests
@@ -22,9 +21,7 @@ def test_optimize_memory_dtypes():
         }
     )
 
-    assert df["float_col"].dtype == "float64", (
-        "Setup error: float_col should be float64"
-    )
+    assert df["float_col"].dtype == "float64", "Setup error: float_col should be float64"
     assert df["int_col"].dtype == "int64", "Setup error: int_col should be int64"
 
     # Run optimization

@@ -64,9 +64,7 @@ class UncertaintyAnalyzer:
                     precision = actual_fraud / count
                     print(f"{name}:")
                     print(f"  Samples: {count:,} ({count / len(proba) * 100:.1f}%)")
-                    print(
-                        f"  Actual Fraud: {actual_fraud:,} (Precision: {precision * 100:.1f}%)"
-                    )
+                    print(f"  Actual Fraud: {actual_fraud:,} (Precision: {precision * 100:.1f}%)")
                 else:
                     print(f"{name}:")
                     print(f"  Samples: {count:,} ({count / len(proba) * 100:.1f}%)")

@@ -3,15 +3,16 @@
 Coordinates data loading, feature engineering, and encoding workflow.
 """
 
-import numpy as np
 import gc
 import pickle
+
+import numpy as np
 from sklearn.model_selection import train_test_split
 
 from ..data.loader import DataLoader
-from .time_features import extract_time_features
-from .encoders import FeatureEncoder
 from ..utils.helpers import optimize_memory
+from .encoders import FeatureEncoder
+from .time_features import extract_time_features
 
 
 class FraudPreprocessor:
@@ -55,9 +56,8 @@ class FraudPreprocessor:
         if target in self.drop_columns:
             self.drop_columns.remove(target)
 
-        self._log(
-            f"Dropping {len(self.drop_columns)} columns (missing rate > {self.config.MISSING_THRESHOLD * 100}%)"
-        )
+        threshold_pct = self.config.MISSING_THRESHOLD * 100
+        self._log(f"Dropping {len(self.drop_columns)} columns (missing rate > {threshold_pct}%)")
 
         if self.drop_columns:
             df = df.drop(columns=self.drop_columns)
@@ -107,19 +107,13 @@ class FraudPreprocessor:
                 stratify=y_train,
             )
 
-        self._log(
-            f"Train set: {X_train.shape} (fraud rate: {y_train.mean() * 100:.2f}%)"
-        )
-        self._log(
-            f"Valid set: {X_valid.shape} (fraud rate: {y_valid.mean() * 100:.2f}%)"
-        )
+        self._log(f"Train set: {X_train.shape} (fraud rate: {y_train.mean() * 100:.2f}%)")
+        self._log(f"Valid set: {X_valid.shape} (fraud rate: {y_valid.mean() * 100:.2f}%)")
         self._log(f"Test set: {X_test.shape} (fraud rate: {y_test.mean() * 100:.2f}%)")
 
         return X_train, X_valid, X_test, y_train, y_valid, y_test
 
-    def fit_transform(
-        self, transaction_path=None, identity_path=None, target="isFraud"
-    ):
+    def fit_transform(self, transaction_path=None, identity_path=None, target="isFraud"):
         """Complete preprocessing workflow (training set).
 
         Args:
@@ -162,9 +156,7 @@ class FraudPreprocessor:
         df = optimize_memory(df, verbose=self.verbose)
 
         # 9. Split dataset
-        X_train, X_valid, X_test, y_train, y_valid, y_test = self._split_data(
-            df, target
-        )
+        X_train, X_valid, X_test, y_train, y_valid, y_test = self._split_data(df, target)
 
         # Clean up memory
         del df

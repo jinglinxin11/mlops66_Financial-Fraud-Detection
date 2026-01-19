@@ -1,3 +1,5 @@
 # Testing dependencies
 pytest>=7.0.0
 coverage>=7.0.0
+httpx>=0.26.0  # For FastAPI TestClient
+locust>=2.24.0  # For load testing
