@@ -6,6 +6,7 @@ on:
   push:
     branches: [ master, main ]
     paths:
+      - '.github/workflows/tests.yaml'
       - 'src/**'
       - 'tests/**'
       - 'requirements_tests.txt'
@@ -13,6 +14,7 @@ on:
   pull_request:
     branches: [ master, main ]
     paths:
+      - '.github/workflows/tests.yaml'
       - 'src/**'
       - 'tests/**'
       - 'requirements_tests.txt'
@@ -24,7 +26,7 @@ permissions: #Suggestion from https://github.com/actions/setup-python#caching-pa
   actions: read #For using actions/checkout and actions/setup-python.
 
 jobs:
-  pytest-test: 
+  pytest-test:
     runs-on: ${{ matrix.os }}
     strategy:
         fail-fast: false #Continue running all jobs even if one fails.
