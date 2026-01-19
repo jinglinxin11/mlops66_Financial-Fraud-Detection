@@ -21,9 +21,7 @@ def test_optimize_memory_dtypes():
         }
     )
 
-    assert df["float_col"].dtype == "float64", (
-        "Setup error: float_col should be float64"
-    )
+    assert df["float_col"].dtype == "float64", "Setup error: float_col should be float64"
     assert df["int_col"].dtype == "int64", "Setup error: int_col should be int64"
 
     # Run optimization

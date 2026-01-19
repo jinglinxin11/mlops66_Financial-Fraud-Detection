@@ -13,9 +13,7 @@ def test_default_initialization():
 
     # Check Path Configuration
     assert isinstance(config.PROJECT_ROOT, Path), "PROJECT_ROOT should be a Path object"
-    assert config.DATA_DIR == config.PROJECT_ROOT / "data", (
-        "DATA_DIR default path mismatch"
-    )
+    assert config.DATA_DIR == config.PROJECT_ROOT / "data", "DATA_DIR default path mismatch"
     assert config.CHECKPOINT_DIR == config.PROJECT_ROOT / "checkpoints", (
         "CHECKPOINT_DIR default path mismatch"
     )
@@ -40,9 +38,7 @@ def test_config_override():
 
     assert config.MAX_EPOCHS == 50, "MAX_EPOCHS should be overridden to 50"
     assert config.BATCH_SIZE == 1024, "BATCH_SIZE should be overridden to 1024"
-    assert config.MISSING_THRESHOLD == 0.5, (
-        "MISSING_THRESHOLD should be overridden to 0.5"
-    )
+    assert config.MISSING_THRESHOLD == 0.5, "MISSING_THRESHOLD should be overridden to 0.5"
 
     # Check other values remain defaults
     assert config.N_D == 48, "Non-overridden N_D should verify default value"
@@ -63,9 +59,7 @@ def test_to_dict():
 
     # Check existence of some categories
     assert "PROJECT_ROOT" in config_dict, "Dictionary should contain PROJECT_ROOT"
-    assert "MISSING_THRESHOLD" in config_dict, (
-        "Dictionary should contain MISSING_THRESHOLD"
-    )
+    assert "MISSING_THRESHOLD" in config_dict, "Dictionary should contain MISSING_THRESHOLD"
     assert "N_D" in config_dict, "Dictionary should contain TabNet parameters"
     assert "DEVICE" in config_dict, "Dictionary should contain DEVICE"
 

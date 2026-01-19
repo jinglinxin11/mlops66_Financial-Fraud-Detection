@@ -41,14 +41,10 @@ def parse_args():
         description="Train TabNet model for fraud detection",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument(
-        "--max-epochs", type=int, default=100, help="Maximum training epochs"
-    )
+    parser.add_argument("--max-epochs", type=int, default=100, help="Maximum training epochs")
     parser.add_argument("--batch-size", type=int, default=8192, help="Batch size")
     parser.add_argument("--lr", type=float, default=0.005, help="Learning rate")
-    parser.add_argument(
-        "--patience", type=int, default=10, help="Early stopping patience"
-    )
+    parser.add_argument("--patience", type=int, default=10, help="Early stopping patience")
     parser.add_argument(
         "--no-resume",
         action="store_true",

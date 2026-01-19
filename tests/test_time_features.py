@@ -45,17 +45,13 @@ def test_extract_time_features_columns_exist(sample_df):
     ]
 
     for col in expected_cols:
-        assert col in df.columns, (
-            f"Column '{col}' should be present in the output DataFrame"
-        )
+        assert col in df.columns, f"Column '{col}' should be present in the output DataFrame"
 
 
 def test_missing_time_column():
     """Test behavior when time column is missing."""
     df = pd.DataFrame({"A": [1, 2, 3]})
-    processed_df = extract_time_features(
-        df.copy(), time_col="TransactionDT", verbose=False
-    )
+    processed_df = extract_time_features(df.copy(), time_col="TransactionDT", verbose=False)
 
     assert list(processed_df.columns) == ["A"], (
         "DataFrame columns should remain unchanged when time column is missing"
@@ -126,22 +122,16 @@ def test_is_night(sample_df):
     df = extract_time_features(sample_df.copy(), verbose=False)
 
     # 00:00 -> Night (1)
-    assert df.loc[0, "is_night"] == 1, (
-        f"Hour {df.loc[0, 'hour']} should be considered night"
-    )
+    assert df.loc[0, "is_night"] == 1, f"Hour {df.loc[0, 'hour']} should be considered night"
 
     # 09:00 -> Day (0)
-    assert df.loc[1, "is_night"] == 0, (
-        f"Hour {df.loc[1, 'hour']} should NOT be considered night"
-    )
+    assert df.loc[1, "is_night"] == 0, f"Hour {df.loc[1, 'hour']} should NOT be considered night"
 
 
 def test_custom_time_column():
     """Test using a custom time column name."""
     df = pd.DataFrame({"custom_time": [3600, 7200]})
-    processed_df = extract_time_features(
-        df.copy(), time_col="custom_time", verbose=False
-    )
+    processed_df = extract_time_features(df.copy(), time_col="custom_time", verbose=False)
 
     assert "hour" in processed_df.columns, (
         "Should successfully extract features from custom time column name"

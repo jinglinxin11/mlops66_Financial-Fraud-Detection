@@ -77,9 +77,7 @@ def test_init(preprocessor, mock_config):
     assert preprocessor.verbose is False, "Verbose should be set correctly"
     assert preprocessor.data_loader is not None, "DataLoader should be initialized"
     assert preprocessor.encoder is not None, "FeatureEncoder should be initialized"
-    assert preprocessor.drop_columns == [], (
-        "Drop columns should be initialized as empty list"
-    )
+    assert preprocessor.drop_columns == [], "Drop columns should be initialized as empty list"
 
 
 def test_remove_high_missing_columns(preprocessor, sample_df):
@@ -88,15 +86,9 @@ def test_remove_high_missing_columns(preprocessor, sample_df):
 
     df_clean = preprocessor._remove_high_missing_columns(sample_df)
 
-    assert "col_missing" not in df_clean.columns, (
-        "Column with high missing rate should be dropped"
-    )
-    assert "col_missing" in preprocessor.drop_columns, (
-        "Dropped columns should be recorded"
-    )
-    assert "col_ok" in df_clean.columns, (
-        "Column with acceptable missing rate should be kept"
-    )
+    assert "col_missing" not in df_clean.columns, "Column with high missing rate should be dropped"
+    assert "col_missing" in preprocessor.drop_columns, "Dropped columns should be recorded"
+    assert "col_ok" in df_clean.columns, "Column with acceptable missing rate should be kept"
     assert "isFraud" in df_clean.columns, "Target column should be kept"
     assert "TransactionID" in df_clean.columns, "ID column should be kept"
 
@@ -108,9 +100,7 @@ def test_split_data_time(preprocessor, sample_df):
     # Needs feature columns to filter data
     preprocessor.encoder.feature_columns = ["col_ok"]
 
-    X_train, X_valid, X_test, y_train, y_valid, y_test = preprocessor._split_data(
-        sample_df
-    )
+    X_train, X_valid, X_test, y_train, y_valid, y_test = preprocessor._split_data(sample_df)
 
     # Check shapes
     assert len(X_train) + len(X_valid) + len(X_test) == 100, (
@@ -131,9 +121,7 @@ def test_split_data_time(preprocessor, sample_df):
     # The last 20 samples should be in X_test
     # Note: _split_data converts to numpy array, so we check values
     # col_ok is random, but let's check shapes mainly.
-    assert X_train.shape[1] == 1, (
-        "Only 'col_ok' was selected"
-    )  # Only 'col_ok' was selected
+    assert X_train.shape[1] == 1, "Only 'col_ok' was selected"  # Only 'col_ok' was selected
 
 
 def test_split_data_random(preprocessor, sample_df):
@@ -141,9 +129,7 @@ def test_split_data_random(preprocessor, sample_df):
     preprocessor.config.USE_TIME_SPLIT = False
     preprocessor.encoder.feature_columns = ["col_ok"]
 
-    X_train, X_valid, X_test, y_train, y_valid, y_test = preprocessor._split_data(
-        sample_df
-    )
+    X_train, X_valid, X_test, y_train, y_valid, y_test = preprocessor._split_data(sample_df)
 
     assert len(X_train) == 70, "Training set should have 70 samples"
     assert len(X_valid) == 10, "Validation set should have 10 samples"
@@ -152,12 +138,8 @@ def test_split_data_random(preprocessor, sample_df):
     # Check stratification roughly (small sample size might not be perfect)
     # original fraud rate 10%
     # y_train mean should be somewhat close
-    assert 0 <= y_train.mean() <= 1, (
-        "Fraud rate in training set should be valid probability"
-    )
-    assert 0 <= y_valid.mean() <= 1, (
-        "Fraud rate in validation set should be valid probability"
-    )
+    assert 0 <= y_train.mean() <= 1, "Fraud rate in training set should be valid probability"
+    assert 0 <= y_valid.mean() <= 1, "Fraud rate in validation set should be valid probability"
     assert 0 <= y_test.mean() <= 1, "Fraud rate in test set should be valid probability"
 
 
@@ -194,9 +176,7 @@ def test_fit_transform(mock_optimize, mock_extract_time, preprocessor, sample_df
     assert isinstance(result["X_train"], np.ndarray), "X_train should be a numpy array"
     assert isinstance(result["y_train"], np.ndarray), "y_train should be a numpy array"
     assert isinstance(result["cat_idxs"], list), "cat_idxs should be a list"
-    assert isinstance(result["feature_columns"], list), (
-        "feature_columns should be a list"
-    )
+    assert isinstance(result["feature_columns"], list), "feature_columns should be a list"
 
 
 @patch("src.features.preprocessor.extract_time_features")

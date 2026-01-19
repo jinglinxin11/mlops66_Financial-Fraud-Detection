@@ -35,9 +35,7 @@ class Config:
     # Preprocessing Parameters
     # ============================================================
 
-    MISSING_THRESHOLD = (
-        0.9  # Missing rate threshold, columns above this will be dropped
-    )
+    MISSING_THRESHOLD = 0.9  # Missing rate threshold, columns above this will be dropped
     RARE_CATEGORY_THRESHOLD = (
         100  # Rare category threshold, categories with count below this will be merged
     )

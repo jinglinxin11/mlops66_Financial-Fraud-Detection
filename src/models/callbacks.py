@@ -33,23 +33,17 @@ class CheckpointCallback(Callback):
 
         if actual_epoch % self.save_every == 0:
             # Save model checkpoint
-            checkpoint_path = os.path.join(
-                self.save_path, f"checkpoint_epoch_{actual_epoch}"
-            )
+            checkpoint_path = os.path.join(self.save_path, f"checkpoint_epoch_{actual_epoch}")
             self.trainer.save_model(checkpoint_path)
 
             # Save training state (epoch, history, etc.)
-            state_path = os.path.join(
-                self.save_path, f"training_state_epoch_{actual_epoch}.pkl"
-            )
+            state_path = os.path.join(self.save_path, f"training_state_epoch_{actual_epoch}.pkl")
             training_state = {
                 "epoch": actual_epoch,
                 "history": dict(self.trainer.history.history)
                 if hasattr(self.trainer, "history")
                 else {},
-                "best_cost": self.trainer.best_cost
-                if hasattr(self.trainer, "best_cost")
-                else None,
+                "best_cost": self.trainer.best_cost if hasattr(self.trainer, "best_cost") else None,
             }
             with open(state_path, "wb") as f:
                 pickle.dump(training_state, f)

@@ -90,9 +90,7 @@ class FeatureEncoder:
         rare_count = 0
         for col in self.categorical_columns:
             value_counts = df[col].value_counts()
-            rare_values = value_counts[
-                value_counts < self.rare_category_threshold
-            ].index
+            rare_values = value_counts[value_counts < self.rare_category_threshold].index
 
             if len(rare_values) > 0:
                 df[col] = df[col].replace(rare_values, "RARE")
@@ -135,9 +133,7 @@ class FeatureEncoder:
 
         # Calculate cat_idxs and cat_dims
         self.cat_idxs = list(range(len(self.categorical_columns)))
-        self.cat_dims = [
-            len(self.label_encoders[col].classes_) for col in self.categorical_columns
-        ]
+        self.cat_dims = [len(self.label_encoders[col].classes_) for col in self.categorical_columns]
 
         self._log(f"cat_idxs: {self.cat_idxs[:5]}... (total {len(self.cat_idxs)})")
         self._log(f"cat_dims: {self.cat_dims[:5]}... (total {len(self.cat_dims)})")

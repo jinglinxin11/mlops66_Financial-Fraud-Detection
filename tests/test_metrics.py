@@ -63,9 +63,7 @@ def test_evaluate_model(trained_model, dummy_data):
     assert metrics["proba"].shape[0] == X.shape[0], (
         "Probability predictions should match number of samples"
     )
-    assert metrics["preds"].shape[0] == X.shape[0], (
-        "Predictions should match number of samples"
-    )
+    assert metrics["preds"].shape[0] == X.shape[0], "Predictions should match number of samples"
 
 
 def test_feature_importance(trained_model, dummy_data):
@@ -93,14 +91,10 @@ def test_evaluate_model_integration(trained_model, dummy_data):
     X, y = dummy_data
     feature_names = [f"feature_{i}" for i in range(X.shape[1])]
 
-    metrics = evaluate_model(
-        trained_model, X, y, feature_columns=feature_names, verbose=False
-    )
+    metrics = evaluate_model(trained_model, X, y, feature_columns=feature_names, verbose=False)
 
     assert "feature_importance" in metrics, "Metrics should include feature importance"
-    assert metrics["feature_importance"] is not None, (
-        "Feature importance should not be None"
-    )
+    assert metrics["feature_importance"] is not None, "Feature importance should not be None"
     assert len(metrics["feature_importance"]) == X.shape[1], (
         "Feature importance should have an entry for each feature"
     )

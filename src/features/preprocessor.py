@@ -107,19 +107,13 @@ class FraudPreprocessor:
                 stratify=y_train,
             )
 
-        self._log(
-            f"Train set: {X_train.shape} (fraud rate: {y_train.mean() * 100:.2f}%)"
-        )
-        self._log(
-            f"Valid set: {X_valid.shape} (fraud rate: {y_valid.mean() * 100:.2f}%)"
-        )
+        self._log(f"Train set: {X_train.shape} (fraud rate: {y_train.mean() * 100:.2f}%)")
+        self._log(f"Valid set: {X_valid.shape} (fraud rate: {y_valid.mean() * 100:.2f}%)")
         self._log(f"Test set: {X_test.shape} (fraud rate: {y_test.mean() * 100:.2f}%)")
 
         return X_train, X_valid, X_test, y_train, y_valid, y_test
 
-    def fit_transform(
-        self, transaction_path=None, identity_path=None, target="isFraud"
-    ):
+    def fit_transform(self, transaction_path=None, identity_path=None, target="isFraud"):
         """Complete preprocessing workflow (training set).
 
         Args:
@@ -162,9 +156,7 @@ class FraudPreprocessor:
         df = optimize_memory(df, verbose=self.verbose)
 
         # 9. Split dataset
-        X_train, X_valid, X_test, y_train, y_valid, y_test = self._split_data(
-            df, target
-        )
+        X_train, X_valid, X_test, y_train, y_valid, y_test = self._split_data(df, target)
 
         # Clean up memory
         del df

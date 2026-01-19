@@ -90,9 +90,7 @@ class TabNetTrainer:
                     self._log(f"Training already complete ({last_epoch}/{max_ep} epochs)")
                     return self.model
 
-                self._log(
-                    f"   Continuing training: {remaining_epochs} epochs remaining"
-                )
+                self._log(f"   Continuing training: {remaining_epochs} epochs remaining")
 
                 # Create checkpoint callback
                 checkpoint_callback = CheckpointCallback(

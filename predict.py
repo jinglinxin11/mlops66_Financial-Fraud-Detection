@@ -66,9 +66,7 @@ def predict_test():
 
     # 5. Generate submission file
     print("\n5. Generating submission file...")
-    submission = pd.DataFrame(
-        {"TransactionID": test_data["transaction_ids"], "isFraud": proba}
-    )
+    submission = pd.DataFrame({"TransactionID": test_data["transaction_ids"], "isFraud": proba})
 
     submission.to_csv(config.SUBMISSION_PATH, index=False)
 
