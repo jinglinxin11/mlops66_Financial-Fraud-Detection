@@ -6,17 +6,17 @@ on:
   push:
     branches: [ master, main ]
     paths:
-      - '/src/**'
-      - '/tests/**'
-      - '/requirements_tests.txt'
-      - '/requirements.txt'
+      - 'src/**'
+      - 'tests/**'
+      - 'requirements_tests.txt'
+      - 'requirements.txt'
   pull_request:
     branches: [ master, main ]
     paths:
-      - '/src/**'
-      - '/tests/**'
-      - '/requirements_tests.txt'
-      - '/requirements.txt'
+      - 'src/**'
+      - 'tests/**'
+      - 'requirements_tests.txt'
+      - 'requirements.txt'
   
 
 permissions: #Suggestion from https://github.com/actions/setup-python#caching-packages-dependencies
