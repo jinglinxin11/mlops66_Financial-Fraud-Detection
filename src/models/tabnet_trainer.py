@@ -5,15 +5,20 @@ Encapsulates TabNet model creation, training, saving, and loading logic
 
 import torch
 from pytorch_tabnet.tab_model import TabNetClassifier
+from typing import Dict, Any, Optional
 
 from .callbacks import CheckpointCallback
 from ..utils.helpers import find_latest_checkpoint
+from ..utils.logger import get_logger
+
+# Module logger
+logger = get_logger(__name__)
 
 
 class TabNetTrainer:
     """TabNet Model Trainer"""
     
-    def __init__(self, config, data, verbose=True):
+    def __init__(self, config, data: Dict[str, Any], verbose: bool = True):
         """
         Args:
             config: Configuration object
@@ -23,12 +28,12 @@ class TabNetTrainer:
         self.config = config
         self.data = data
         self.verbose = verbose
-        self.model = None
+        self.model: Optional[TabNetClassifier] = None
     
-    def _log(self, message):
-        """Print log message"""
+    def _log(self, message: str):
+        """Log message using logging module"""
         if self.verbose:
-            print(message)
+            logger.info(message)
     
     def _create_model(self):
         """Create a new TabNet model"""
