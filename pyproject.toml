@@ -1,0 +1,27 @@
+[project]
+name = "fraud-detection"
+version = "1.0.0"
+description = "IEEE-CIS Fraud Detection using TabNet"
+readme = "README.md"
+requires-python = ">=3.11"
+
+[tool.bandit]
+exclude_dirs = ["tests", "venv", ".venv"]
+skips = ["B101"]  # Skip assert warnings in non-test code
+
+# Ruff configuration (replaces ruff.toml)
+# https://docs.astral.sh/ruff/settings/
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+# D = pydocstyle, E = pycodestyle errors, F = pyflakes, I = isort, W = pycodestyle warnings
+select = ["D", "E", "F", "I", "W"]
+# D417 = Missing argument descriptions in docstring (too strict)
+# E402 = Module level import not at top of file (needed for warnings.filterwarnings)
+ignore = ["D417", "E402"]
+
+[tool.ruff.lint.pydocstyle]
+# Use Google-style docstrings
+convention = "google"

@@ -1,8 +1,9 @@
 """Tests for the DataLoader class in src.data.loader."""
 
-import pytest
-import pandas as pd
 import numpy as np
+import pandas as pd
+import pytest
+
 from src.data.loader import DataLoader
 
 
@@ -28,9 +29,7 @@ def sample_data(tmp_path):
     trans_df.to_csv(trans_path, index=False)
 
     # Identity data
-    id_df = pd.DataFrame(
-        {"TransactionID": [1, 2], "device_info": ["mobile", "desktop"]}
-    )
+    id_df = pd.DataFrame({"TransactionID": [1, 2], "device_info": ["mobile", "desktop"]})
     id_path = tmp_path / "identity.csv"
     id_df.to_csv(id_path, index=False)
 
@@ -55,14 +54,10 @@ def test_load_transaction_success(loader, sample_data):
     trans_path, _ = sample_data
     df = loader.load_transaction(trans_path)
 
-    assert isinstance(df, pd.DataFrame), (
-        "load_transaction should return a pandas DataFrame"
-    )
+    assert isinstance(df, pd.DataFrame), "load_transaction should return a pandas DataFrame"
     assert not df.empty, "Loaded transaction DataFrame should not be empty"
     assert df.shape == (3, 4), f"Expected shape (3, 4), but got {df.shape}"
-    assert "TransactionID" in df.columns, (
-        "TransactionID column missing from loaded data"
-    )
+    assert "TransactionID" in df.columns, "TransactionID column missing from loaded data"
 
 
 def test_load_transaction_file_not_found(loader, tmp_path):
@@ -77,9 +72,7 @@ def test_load_identity_success(loader, sample_data):
     _, id_path = sample_data
     df = loader.load_identity(id_path)
 
-    assert isinstance(df, pd.DataFrame), (
-        "load_identity should return a pandas DataFrame"
-    )
+    assert isinstance(df, pd.DataFrame), "load_identity should return a pandas DataFrame"
     assert df.shape == (2, 2), f"Expected shape (2, 2), but got {df.shape}"
 
 
@@ -96,12 +89,8 @@ def test_load_and_merge(loader, sample_data):
     trans_path, id_path = sample_data
     merged_df = loader.load_and_merge(trans_path, id_path)
 
-    assert isinstance(merged_df, pd.DataFrame), (
-        "load_and_merge should return a DataFrame"
-    )
-    assert merged_df.shape[0] == 3, (
-        f"Expected 3 rows in merged data, got {merged_df.shape[0]}"
-    )
+    assert isinstance(merged_df, pd.DataFrame), "load_and_merge should return a DataFrame"
+    assert merged_df.shape[0] == 3, f"Expected 3 rows in merged data, got {merged_df.shape[0]}"
     assert "device_info" in merged_df.columns, (
         "Merged data should contain identity columns (device_info)"
     )
@@ -118,9 +107,7 @@ def test_load_and_merge_no_identity(loader, sample_data):
     trans_path, _ = sample_data
     df = loader.load_and_merge(trans_path, identity_path=None)
 
-    assert isinstance(df, pd.DataFrame), (
-        "Should return DataFrame even without identity path"
-    )
+    assert isinstance(df, pd.DataFrame), "Should return DataFrame even without identity path"
     assert df.shape == (3, 4), f"Expected shape (3, 4) without merge, got {df.shape}"
     assert "device_info" not in df.columns, (
         "Result should not contain identity columns when identity_path is None"
@@ -138,12 +125,8 @@ def test_analyze(loader, sample_data):
     missing_stats = loader.analyze(df, target="isFraud")
 
     assert isinstance(missing_stats, pd.Series), "analyze should return a pandas Series"
-    assert missing_stats["amount"] > 0, (
-        "Analyze should detect missing values in 'amount' column"
-    )
-    assert missing_stats.shape[0] == df.shape[1], (
-        "Missing stats should have one entry per column"
-    )
+    assert missing_stats["amount"] > 0, "Analyze should detect missing values in 'amount' column"
+    assert missing_stats.shape[0] == df.shape[1], "Missing stats should have one entry per column"
 
 
 def test_logging(capsys, sample_data):

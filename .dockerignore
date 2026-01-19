@@ -1,0 +1,58 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Data files (will be mounted or downloaded from GCP)
+data/
+*.csv
+
+# Model artifacts (will be mounted or downloaded from GCP)
+checkpoints/
+tabnet_fraud_model/
+tabnet_fraud_model.zip
+*.pkl
+*.pt
+*.pth
+
+# Tests (not needed in production image)
+tests/
+*_test.py
+test_*.py
+
+# Documentation
+*.md
+docs/
+reports/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Other
+LICENSE
+*.log

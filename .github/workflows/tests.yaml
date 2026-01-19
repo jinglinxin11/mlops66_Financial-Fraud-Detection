@@ -5,8 +5,19 @@ on:
     #If working inside another branch, tests must be triggered manually.
   push:
     branches: [ master, main ]
+    paths:
+      - '/src/**'
+      - '/tests/**'
+      - '/requirements_tests.txt'
+      - '/requirements.txt'
   pull_request:
     branches: [ master, main ]
+    paths:
+      - '/src/**'
+      - '/tests/**'
+      - '/requirements_tests.txt'
+      - '/requirements.txt'
+  
 
 permissions: #Suggestion from https://github.com/actions/setup-python#caching-packages-dependencies
   contents: read #For checking out the repository code.

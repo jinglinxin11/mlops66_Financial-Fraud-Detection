@@ -17,9 +17,7 @@ def extract_time_features(df, time_col="TransactionDT", verbose=True):
     """
     if time_col not in df.columns:
         if verbose:
-            print(
-                f"Warning: {time_col} column not found, skipping time feature extraction"
-            )
+            print(f"Warning: {time_col} column not found, skipping time feature extraction")
         return df
 
     if verbose:
@@ -49,8 +47,6 @@ def extract_time_features(df, time_col="TransactionDT", verbose=True):
     df["is_night"] = ((df["hour"] >= 0) & (df["hour"] <= 6)).astype(int)
 
     if verbose:
-        print(
-            "New features: hour, dayofweek, dayofmonth, is_working_hour, is_weekend, is_night"
-        )
+        print("New features: hour, dayofweek, dayofmonth, is_working_hour, is_weekend, is_night")
 
     return df

@@ -1,9 +1,11 @@
 """Tests for callback functionality."""
 
-import pytest
 import os
 import pickle
 from unittest.mock import MagicMock
+
+import pytest
+
 from src.models.callbacks import CheckpointCallback
 
 
@@ -54,7 +56,7 @@ def test_no_save_on_intermediate_epoch(callback):
 
     callback.trainer.save_model.assert_not_called()
 
-    # Check that directory is empty (except potentially hidden files if any, but scandir handles that)
+    # Check that directory is empty (scandir handles hidden files)
     files = list(os.scandir(callback.save_path))
     assert len(files) == 0, (
         f"Save directory should be empty for intermediate epochs, found: {[f.name for f in files]}"
@@ -72,24 +74,16 @@ def test_save_on_correct_epoch(callback):
 
     # 2. Check state file created
     expected_state_file = os.path.join(callback.save_path, "training_state_epoch_2.pkl")
-    assert os.path.exists(expected_state_file), (
-        f"State file {expected_state_file} was not created"
-    )
+    assert os.path.exists(expected_state_file), f"State file {expected_state_file} was not created"
 
     # 3. Check state content
     with open(expected_state_file, "rb") as f:
         state = pickle.load(f)
 
-    assert state["epoch"] == 2, (
-        f"Expected epoch 2 in state file, got {state.get('epoch')}"
-    )
-    assert state["best_cost"] == 0.35, (
-        f"Expected best_cost 0.35, got {state.get('best_cost')}"
-    )
+    assert state["epoch"] == 2, f"Expected epoch 2 in state file, got {state.get('epoch')}"
+    assert state["best_cost"] == 0.35, f"Expected best_cost 0.35, got {state.get('best_cost')}"
     assert "history" in state, "History should be preserved in state"
-    assert state["history"] == {"loss": [0.5, 0.4], "auc": [0.7, 0.8]}, (
-        "History content mismatch"
-    )
+    assert state["history"] == {"loss": [0.5, 0.4], "auc": [0.7, 0.8]}, "History content mismatch"
 
 
 def test_save_sequence(callback):
@@ -98,24 +92,16 @@ def test_save_sequence(callback):
 
     # Epoch 1 (0): No save
     callback.on_epoch_end(0)
-    assert callback.trainer.save_model.call_count == 0, (
-        "Should not save on epoch 1 (index 0)"
-    )
+    assert callback.trainer.save_model.call_count == 0, "Should not save on epoch 1 (index 0)"
 
     # Epoch 2 (1): Save
     callback.on_epoch_end(1)
-    assert callback.trainer.save_model.call_count == 1, (
-        "Should save on epoch 2 (index 1)"
-    )
+    assert callback.trainer.save_model.call_count == 1, "Should save on epoch 2 (index 1)"
 
     # Epoch 3 (2): No save
     callback.on_epoch_end(2)
-    assert callback.trainer.save_model.call_count == 1, (
-        "Should not save on epoch 3 (index 2)"
-    )
+    assert callback.trainer.save_model.call_count == 1, "Should not save on epoch 3 (index 2)"
 
     # Epoch 4 (3): Save
     callback.on_epoch_end(3)
-    assert callback.trainer.save_model.call_count == 2, (
-        "Should save on epoch 4 (index 3)"
-    )
+    assert callback.trainer.save_model.call_count == 2, "Should save on epoch 4 (index 3)"

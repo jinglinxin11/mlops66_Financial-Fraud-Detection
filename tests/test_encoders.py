@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 import pytest
+
 from src.features.encoders import FeatureEncoder
 
 
@@ -32,16 +33,12 @@ def test_identify_feature_types(encoder, dummy_df):
         dummy_df, target="target", exclude_cols=["id", "target"]
     )
 
-    assert "cat1" in encoder.categorical_columns, (
-        "cat1 should be identified as categorical"
-    )
+    assert "cat1" in encoder.categorical_columns, "cat1 should be identified as categorical"
     assert "cat2" in encoder.categorical_columns, (
         "cat2 should be identified as categorical (low cardinality int)"
     )
     assert "num1" in encoder.numerical_columns, "num1 should be identified as numerical"
-    assert "num2" in encoder.categorical_columns, (
-        "num2 should be identified as categorical"
-    )
+    assert "num2" in encoder.categorical_columns, "num2 should be identified as categorical"
     assert "id" not in feature_cols, "id should be excluded from features"
     assert "target" not in feature_cols, "target should be excluded from features"
 
@@ -66,9 +63,7 @@ def test_handle_rare_categories(encoder, dummy_df):
 def test_fit_transform(encoder, dummy_df):
     """Test fitting and transforming training data."""
     # Setup columns
-    encoder.identify_feature_types(
-        dummy_df, target="target", exclude_cols=["id", "target"]
-    )
+    encoder.identify_feature_types(dummy_df, target="target", exclude_cols=["id", "target"])
 
     # Introduce missing values
     df_missing = dummy_df.copy()
@@ -104,9 +99,7 @@ def test_fit_transform(encoder, dummy_df):
 def test_transform(encoder, dummy_df):
     """Test transforming test data (including unseen categories and missing values)."""
     # Fit first
-    encoder.identify_feature_types(
-        dummy_df, target="target", exclude_cols=["id", "target"]
-    )
+    encoder.identify_feature_types(dummy_df, target="target", exclude_cols=["id", "target"])
     encoder.fit_transform(dummy_df.copy())
 
     # Create test data with new categories and missing values
@@ -127,9 +120,9 @@ def test_transform(encoder, dummy_df):
     # Unseen 'Z' should be mapped to the first class (usually 0) or handled gracefully
     # Based on code: df.loc[unknown_mask, col] = le.classes_[0]
     le_cat1 = encoder.label_encoders["cat1"]
-    assert (
-        df_transformed.loc[1, "cat1"] == le_cat1.transform([le_cat1.classes_[0]])[0]
-    ), "Unseen category should be mapped to first known class"
+    assert df_transformed.loc[1, "cat1"] == le_cat1.transform([le_cat1.classes_[0]])[0], (
+        "Unseen category should be mapped to first known class"
+    )
 
     # Numerical missing should be median from train
     expected_median = dummy_df["num1"].median()
@@ -140,9 +133,7 @@ def test_transform(encoder, dummy_df):
 
 def test_state_management(encoder, dummy_df):
     """Test saving and loading state."""
-    encoder.identify_feature_types(
-        dummy_df, target="target", exclude_cols=["id", "target"]
-    )
+    encoder.identify_feature_types(dummy_df, target="target", exclude_cols=["id", "target"])
     encoder.fit_transform(dummy_df.copy())
 
     state = encoder.get_state()
@@ -156,9 +147,7 @@ def test_state_management(encoder, dummy_df):
     assert new_encoder.numerical_columns == encoder.numerical_columns, (
         "Numerical columns should match after loading state"
     )
-    assert new_encoder.cat_dims == encoder.cat_dims, (
-        "cat_dims should match after loading state"
-    )
+    assert new_encoder.cat_dims == encoder.cat_dims, "cat_dims should match after loading state"
     assert new_encoder.numerical_medians["num1"] == encoder.numerical_medians["num1"], (
         "Numerical medians should match after loading state"
     )

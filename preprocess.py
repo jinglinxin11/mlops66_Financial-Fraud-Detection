@@ -47,9 +47,7 @@ def preprocess_train(config):
     print(f"Validation set shape: {data['X_valid'].shape}")
     print(f"Test set shape: {data['X_test'].shape}")
     print(f"Number of features: {len(data['feature_columns'])}")
-    print(
-        f"Categorical feature indices: {data['cat_idxs'][:5]}... (total {len(data['cat_idxs'])})"
-    )
+    print(f"Categorical feature indices: {data['cat_idxs'][:5]}... (total {len(data['cat_idxs'])})")
     print(f"\nPreprocessor saved to: {config.PREPROCESSOR_PATH}")
 
     return data, preprocessor
