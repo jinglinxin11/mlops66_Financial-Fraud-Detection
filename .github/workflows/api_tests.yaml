@@ -63,23 +63,30 @@ jobs:
       with:
         context: .
         push: false
+        load: true  # Load image into local Docker daemon
         tags: fraud-detection-api:test
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
     - name: Test Docker image starts
       run: |
-        # Start container in background (will fail health check without model, but should start)
-        docker run -d --name test-api -p 8000:8000 fraud-detection-api:test || true
+        # Verify image was built
+        docker images fraud-detection-api:test
         
-        # Wait a bit for startup
-        sleep 10
+        # Start container in background
+        docker run -d --name test-api -p 8000:8000 fraud-detection-api:test
         
-        # Check if container is running (may have exited due to missing model files)
+        # Wait for startup
+        sleep 15
+        
+        # Check container status
         docker ps -a
         
         # Check logs
         docker logs test-api
+        
+        # Test health endpoint
+        curl -f http://localhost:8000/ || echo "Health check failed (expected without model)"
         
         # Cleanup
         docker stop test-api || true
