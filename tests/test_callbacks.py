@@ -1,9 +1,11 @@
 """Tests for callback functionality."""
 
-import pytest
 import os
 import pickle
 from unittest.mock import MagicMock
+
+import pytest
+
 from src.models.callbacks import CheckpointCallback
 
 
@@ -54,7 +56,7 @@ def test_no_save_on_intermediate_epoch(callback):
 
     callback.trainer.save_model.assert_not_called()
 
-    # Check that directory is empty (except potentially hidden files if any, but scandir handles that)
+    # Check that directory is empty (scandir handles hidden files)
     files = list(os.scandir(callback.save_path))
     assert len(files) == 0, (
         f"Save directory should be empty for intermediate epochs, found: {[f.name for f in files]}"

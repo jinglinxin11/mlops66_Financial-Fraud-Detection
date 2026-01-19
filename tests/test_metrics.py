@@ -1,11 +1,12 @@
 """Tests for evaluation metrics."""
 
-import pytest
 import numpy as np
+import pytest
+import torch
 from pytorch_tabnet.tab_model import TabNetClassifier
 from sklearn.datasets import make_classification
+
 from src.evaluation.metrics import evaluate_model, get_feature_importance
-import torch
 
 
 @pytest.fixture

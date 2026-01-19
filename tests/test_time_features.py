@@ -1,8 +1,8 @@
 """Tests for time feature extraction."""
 
-import pytest
 import pandas as pd
-import numpy as np
+import pytest
+
 from src.features.time_features import extract_time_features
 
 
@@ -58,7 +58,7 @@ def test_missing_time_column():
     )
 
     assert list(processed_df.columns) == ["A"], (
-        f"DataFrame columns should remain unchanged when time column is missing. Found: {processed_df.columns}"
+        "DataFrame columns should remain unchanged when time column is missing"
     )
 
 

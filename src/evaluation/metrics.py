@@ -4,7 +4,7 @@ Calculate model performance metrics.
 """
 
 import pandas as pd
-from sklearn.metrics import roc_auc_score, classification_report, confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
 
 
 def evaluate_model(model, X_test, y_test, feature_columns=None, verbose=True):
@@ -35,12 +35,12 @@ def evaluate_model(model, X_test, y_test, feature_columns=None, verbose=True):
 
     if verbose:
         print(f"\nTest AUC: {auc:.4f}")
-        print(f"\nConfusion Matrix:")
-        print(f"              Pred Normal  Pred Fraud")
+        print("\nConfusion Matrix:")
+        print("              Pred Normal  Pred Fraud")
         print(f"Actual Normal   {cm[0, 0]:8d}    {cm[0, 1]:8d}")
         print(f"Actual Fraud    {cm[1, 0]:8d}    {cm[1, 1]:8d}")
 
-        print(f"\nClassification Report:")
+        print("\nClassification Report:")
         print(classification_report(y_test, preds, target_names=["Normal", "Fraud"]))
 
     # Feature importance

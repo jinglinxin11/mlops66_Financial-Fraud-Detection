@@ -1,9 +1,10 @@
 """Tests for TabNetTrainer."""
 
-import pytest
+from unittest.mock import MagicMock, patch
+
 import numpy as np
-import torch
-from unittest.mock import MagicMock, patch, ANY
+import pytest
+
 from src.models.tabnet_trainer import TabNetTrainer
 
 
@@ -89,8 +90,9 @@ def test_create_model_params(MockClassifier, trainer):
     assert kwargs["cat_dims"] == trainer.data["cat_dims"], (
         "Model initialized with wrong cat_dims"
     )
-    assert kwargs["mask_type"] == trainer.config.MASK_TYPE, (
-        f"Model initialized with wrong mask_type. Expected {trainer.config.MASK_TYPE}, got {kwargs['mask_type']}"
+    expected_mask = trainer.config.MASK_TYPE
+    assert kwargs["mask_type"] == expected_mask, (
+        f"Model initialized with wrong mask_type. Expected {expected_mask}"
     )
 
 
@@ -156,8 +158,9 @@ def test_train_resume_success(
     mock_model.fit.assert_called_once()
     call_args = mock_model.fit.call_args[1]
 
-    assert call_args["max_epochs"] == expected_remaining, (
-        f"Resumed training should run for {expected_remaining} epochs, got {call_args['max_epochs']}"
+    actual_epochs = call_args["max_epochs"]
+    assert actual_epochs == expected_remaining, (
+        f"Resumed training should run for {expected_remaining} epochs, got {actual_epochs}"
     )
     assert call_args["warm_start"] is True, (
         "Resumed training should set warm_start=True"
@@ -210,7 +213,7 @@ def test_save_load(trainer):
         # Need 'dict' access for MockClassifier().load_model call inside class
         new_mock_model = MockClassifier.return_value
 
-        loaded_model = trainer.load("custom_path.zip")
+        trainer.load("custom_path.zip")
 
         MockClassifier.assert_called_once()
         new_mock_model.load_model.assert_called_with("custom_path.zip")

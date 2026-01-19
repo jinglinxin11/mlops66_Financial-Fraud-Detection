@@ -3,8 +3,8 @@
 Common helper functions.
 """
 
-import os
 import glob
+import os
 
 
 def optimize_memory(df, verbose=True):
@@ -63,7 +63,7 @@ def find_latest_checkpoint(checkpoint_dir):
         try:
             epoch = int(cp.split("_epoch_")[1].replace(".zip", ""))
             epochs.append((epoch, cp))
-        except:
+        except (ValueError, IndexError):
             continue
 
     if not epochs:

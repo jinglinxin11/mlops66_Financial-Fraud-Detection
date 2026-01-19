@@ -3,15 +3,16 @@
 Coordinates data loading, feature engineering, and encoding workflow.
 """
 
-import numpy as np
 import gc
 import pickle
+
+import numpy as np
 from sklearn.model_selection import train_test_split
 
 from ..data.loader import DataLoader
-from .time_features import extract_time_features
-from .encoders import FeatureEncoder
 from ..utils.helpers import optimize_memory
+from .encoders import FeatureEncoder
+from .time_features import extract_time_features
 
 
 class FraudPreprocessor:
@@ -55,9 +56,8 @@ class FraudPreprocessor:
         if target in self.drop_columns:
             self.drop_columns.remove(target)
 
-        self._log(
-            f"Dropping {len(self.drop_columns)} columns (missing rate > {self.config.MISSING_THRESHOLD * 100}%)"
-        )
+        threshold_pct = self.config.MISSING_THRESHOLD * 100
+        self._log(f"Dropping {len(self.drop_columns)} columns (missing rate > {threshold_pct}%)")
 
         if self.drop_columns:
             df = df.drop(columns=self.drop_columns)

@@ -1,10 +1,9 @@
 """Tests for helper functions."""
 
-import pytest
-import pandas as pd
 import numpy as np
-import os
-from src.utils.helpers import optimize_memory, find_latest_checkpoint
+import pandas as pd
+
+from src.utils.helpers import find_latest_checkpoint, optimize_memory
 
 # -----------------------------------------------------------------------------
 # optimize_memory Tests

@@ -3,8 +3,9 @@
 Centralized management of all configuration parameters.
 """
 
-import torch
 from pathlib import Path
+
+import torch
 
 
 class Config:

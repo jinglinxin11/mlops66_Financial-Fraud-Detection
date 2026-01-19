@@ -1,0 +1,86 @@
+name: "API Tests"
+
+# Triggers on push/PR to main, or manual trigger
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - 'api/**'
+      - 'tests/test_api.py'
+      - '.github/workflows/api_tests.yaml'
+  pull_request:
+    branches: [master, main]
+    paths:
+      - 'api/**'
+      - 'tests/test_api.py'
+      - '.github/workflows/api_tests.yaml'
+  workflow_dispatch:  # Allow manual trigger
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install PyTorch (CPU)
+      run: |
+        pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements_tests.txt
+
+    - name: Run API tests
+      run: |
+        pytest tests/test_api.py -v --tb=short
+
+  docker-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: false
+        tags: fraud-detection-api:test
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Test Docker image starts
+      run: |
+        # Start container in background (will fail health check without model, but should start)
+        docker run -d --name test-api -p 8000:8000 fraud-detection-api:test || true
+        
+        # Wait a bit for startup
+        sleep 10
+        
+        # Check if container is running (may have exited due to missing model files)
+        docker ps -a
+        
+        # Check logs
+        docker logs test-api
+        
+        # Cleanup
+        docker stop test-api || true
+        docker rm test-api || true

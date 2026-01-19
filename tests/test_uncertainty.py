@@ -1,7 +1,8 @@
 """Tests for UncertaintyAnalyzer in src.evaluation.uncertainty."""
 
-import pytest
 import numpy as np
+import pytest
+
 from src.evaluation.uncertainty import UncertaintyAnalyzer
 
 

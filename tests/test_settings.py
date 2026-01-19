@@ -1,8 +1,9 @@
 """Tests for the Config class in src.config.settings."""
 
-import pytest
-import torch
 from pathlib import Path
+
+import pytest
+
 from src.config.settings import Config
 
 

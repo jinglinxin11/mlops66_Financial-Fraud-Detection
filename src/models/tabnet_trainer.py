@@ -6,8 +6,8 @@ Encapsulates TabNet model creation, training, saving, and loading logic.
 import torch
 from pytorch_tabnet.tab_model import TabNetClassifier
 
-from .callbacks import CheckpointCallback
 from ..utils.helpers import find_latest_checkpoint
+from .callbacks import CheckpointCallback
 
 
 class TabNetTrainer:
@@ -86,9 +86,8 @@ class TabNetTrainer:
                 remaining_epochs = self.config.MAX_EPOCHS - last_epoch
 
                 if remaining_epochs <= 0:
-                    self._log(
-                        f"✅ Training already complete ({last_epoch}/{self.config.MAX_EPOCHS} epochs)"
-                    )
+                    max_ep = self.config.MAX_EPOCHS
+                    self._log(f"Training already complete ({last_epoch}/{max_ep} epochs)")
                     return self.model
 
                 self._log(

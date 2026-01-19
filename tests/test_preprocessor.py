@@ -1,11 +1,10 @@
 """Tests for preprocessor module."""
 
-import pytest
-import pandas as pd
+from unittest.mock import MagicMock, patch
+
 import numpy as np
-from unittest.mock import MagicMock, patch, ANY
-import pickle
-import os
+import pandas as pd
+import pytest
 
 from src.features.preprocessor import FraudPreprocessor
 

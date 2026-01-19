@@ -3,7 +3,6 @@
 Handles encoding of categorical and numerical features.
 """
 
-import numpy as np
 from sklearn.preprocessing import LabelEncoder
 
 

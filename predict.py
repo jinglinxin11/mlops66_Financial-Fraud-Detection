@@ -9,8 +9,9 @@ Note:
 """
 
 import warnings
-import pandas as pd
 from pathlib import Path
+
+import pandas as pd
 
 warnings.filterwarnings("ignore")
 
@@ -78,14 +79,14 @@ def predict_test():
     print(f"\nSubmission file: {config.SUBMISSION_PATH}")
     print(f"Sample count: {len(submission):,}")
 
-    print(f"\nProbability distribution:")
+    print("\nProbability distribution:")
     print(submission["isFraud"].describe())
 
     print(f"\nTransactions predicted as high risk (>=0.5): {(proba >= 0.5).sum():,}")
     print(f"Transactions predicted as high risk (>=0.8): {(proba >= 0.8).sum():,}")
 
     # Visualize probability distribution
-    print(f"\nProbability distribution:")
+    print("\nProbability distribution:")
     print(f"  [0.0-0.1]: {((proba >= 0.0) & (proba < 0.1)).sum():,}")
     print(f"  [0.1-0.3]: {((proba >= 0.1) & (proba < 0.3)).sum():,}")
     print(f"  [0.3-0.5]: {((proba >= 0.3) & (proba < 0.5)).sum():,}")

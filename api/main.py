@@ -1,6 +1,7 @@
 """FastAPI application for fraud detection predictions."""
 
 from fastapi import FastAPI
+
 from src.config.settings import Config
 from src.features.preprocessor import FraudPreprocessor
 from src.models.tabnet_trainer import TabNetTrainer
