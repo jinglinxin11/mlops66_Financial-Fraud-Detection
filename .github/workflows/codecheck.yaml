@@ -12,7 +12,7 @@ permissions:
     actions: read
 
 jobs:
-    build:
+    ruff-check:
         runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: false
@@ -22,11 +22,11 @@ jobs:
 
         steps:
         - name: Checkout
-          uses: actions/checkout@v5 
+          uses: actions/checkout@v5
         - name: Setup Python
           uses: actions/setup-python@v5
             
-          with: 
+          with:
             python-version: ${{ matrix.python-version }}
             cache: "pip"
         - name: Install dependencies
@@ -37,7 +37,7 @@ jobs:
         
         - name: Run ruff check
           run: |
-            ruff check .        
+            ruff check .
         
         - name: Run ruff format
           run: |

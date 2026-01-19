@@ -5,15 +5,28 @@ on:
     #If working inside another branch, tests must be triggered manually.
   push:
     branches: [ master, main ]
+    paths:
+      - '.github/workflows/tests.yaml'
+      - 'src/**'
+      - 'tests/**'
+      - 'requirements_tests.txt'
+      - 'requirements.txt'
   pull_request:
     branches: [ master, main ]
+    paths:
+      - '.github/workflows/tests.yaml'
+      - 'src/**'
+      - 'tests/**'
+      - 'requirements_tests.txt'
+      - 'requirements.txt'
+  
 
 permissions: #Suggestion from https://github.com/actions/setup-python#caching-packages-dependencies
   contents: read #For checking out the repository code.
   actions: read #For using actions/checkout and actions/setup-python.
 
 jobs:
-  build:
+  pytest-test:
     runs-on: ${{ matrix.os }}
     strategy:
         fail-fast: false #Continue running all jobs even if one fails.
