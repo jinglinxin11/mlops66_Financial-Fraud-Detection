@@ -17,12 +17,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PyTorch CPU-only (lighter for API deployment)
-RUN pip install --no-cache-dir torch torchvision torchaudio 
+# RUN pip install --no-cache-dir torch torchvision torchaudio 
 #--index-url https://download.pytorch.org/whl/cpu
 
-# Copy requirements and install dependencies
+# Copy requirements and install dependencies 
+# Unified installation of PyTorch and requirements to ensure it gets CPU version for PyTorch
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cpu \
+    torch torchvision torchaudio \
+    -r requirements.txt
 
 # Copy application code
 COPY src/ ./src/

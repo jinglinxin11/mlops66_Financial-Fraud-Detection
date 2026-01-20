@@ -34,15 +34,13 @@ jobs:
         python-version: '3.11'
         cache: 'pip'
 
-    - name: Install PyTorch (CPU)
-      run: |
-        pip install torch torchvision torchaudio
-
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r requirements_tests.txt
+        pip install --extra-index-url https://download.pytorch.org/whl/cpu \
+        torch torchvision torchaudio \
+        -r requirements.txt \
+        -r requirements_tests.txt
 
     - name: Run API tests
       run: |
