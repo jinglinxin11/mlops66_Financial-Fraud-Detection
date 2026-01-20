@@ -20,7 +20,7 @@ tabnet_fraud_model.zip
 
 
 # Data directory
-data/
+data/*
 
 # Output files
 submission.csv
