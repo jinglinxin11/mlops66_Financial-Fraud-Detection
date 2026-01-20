@@ -23,7 +23,7 @@ permissions:
 jobs:
   api-tests:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -50,7 +50,7 @@ jobs:
 
   docker-build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -72,22 +72,22 @@ jobs:
       run: |
         # Verify image was built
         docker images fraud-detection-api:test
-        
+
         # Start container in background
         docker run -d --name test-api -p 8000:8000 fraud-detection-api:test
-        
+
         # Wait for startup
         sleep 15
-        
+
         # Check container status
         docker ps -a
-        
+
         # Check logs
         docker logs test-api
-        
+
         # Test health endpoint
         curl -f http://localhost:8000/ || echo "Health check failed (expected without model)"
-        
+
         # Cleanup
         docker stop test-api || true
         docker rm test-api || true
