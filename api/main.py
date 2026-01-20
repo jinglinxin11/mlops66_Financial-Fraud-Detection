@@ -1,6 +1,7 @@
 """FastAPI application for fraud detection predictions."""
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.config.settings import Config
 from src.features.preprocessor import FraudPreprocessor
@@ -8,34 +9,69 @@ from src.models.tabnet_trainer import TabNetTrainer
 
 app = FastAPI(title="Fraud Detection API", version="1.0")
 
+# Enable CORS (so browser frontend can call the API)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # for demo
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Globals
+config = Config()
+preprocessor = None
+model = None
+test_data_cache = None
+
+
+def ensure_loaded():
+    """Ensure model + preprocessor + cached test data are loaded.
+
+    This is needed because startup events may not run in some CI/pytest setups.
+    """
+    global preprocessor, model, test_data_cache
+
+    if preprocessor is None:
+        preprocessor = FraudPreprocessor(config)
+        preprocessor.load()
+
+    if model is None:
+        trainer = TabNetTrainer(config, data=None)
+        model = trainer.load()
+
+    if test_data_cache is None:
+        test_data_cache = preprocessor.transform()
+
 
 @app.get("/")
 def root():
-    """Return the API health status."""
+    """Root endpoint returning service status."""
     return {"status": "running"}
+
+
+@app.get("/health")
+def health():
+    """Health check endpoint used for monitoring."""
+    return {"status": "ok"}
 
 
 @app.post("/predict_test")
 def predict_test(limit: int = 5):
-    """Run preprocessing on the Kaggle test set and return the first N predictions."""
-    config = Config()
+    """Predict fraud probabilities on cached Kaggle test transactions.
 
-    # Load preprocessor + model (same as predict.py)
-    preprocessor = FraudPreprocessor(config)
-    preprocessor.load()
+    Args:
+        limit: Number of predictions to return.
 
-    trainer = TabNetTrainer(config, data=None)
-    model = trainer.load()
+    Returns:
+        Dict with count and a list of predictions.
+    """
+    ensure_loaded()
 
-    # Transform test set
-    test_data = preprocessor.transform()
+    proba = model.predict_proba(test_data_cache["X_test"])[:, 1]
 
-    # Predict probabilities
-    proba = model.predict_proba(test_data["X_test"])[:, 1]
-
-    # Return first N predictions
     out = []
-    for tid, p in zip(test_data["transaction_ids"][:limit], proba[:limit]):
+    for tid, p in zip(test_data_cache["transaction_ids"][:limit], proba[:limit]):
         out.append(
             {
                 "TransactionID": int(tid),
