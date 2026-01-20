@@ -3,13 +3,15 @@ import numpy as np
 from collections import Counter
 from typing import List, Dict, Any
 import math
+import pandas as pd
+import seaborn as sns
 
 from src.features.preprocessor import FraudPreprocessor
 from src.config.settings import Config
 
 
 class DatasetStatistics:
-    def __init__(self, config: Config, verbose: bool = False):
+    def __init__(self, config: Config, verbose: bool = True):
         self.preprocessor = FraudPreprocessor(config=config, verbose=verbose)
         self.data = self.preprocessor.fit_transform()
         self.verbose = verbose
@@ -58,27 +60,83 @@ class DatasetStatistics:
         plt.tight_layout()
         plt.savefig('feature_distributions.png')
 
+    def CorrelationMatrix(self):
+        """ Plot correlation matrix of features."""
+        X_train = self.data["X_train"]
+        feature_columns = self.data["feature_columns"]
+        corr_matrix = np.corrcoef(X_train, rowvar=False)
+        
+        # Converting to dataframe
+        df_corr = pd.DataFrame(corr_matrix, index=feature_columns, columns=feature_columns)
+        
+        # Filtering to show only strong correlations
+        high_corr_feats = df_corr.columns[(df_corr.abs() > 0.7).sum() > 1]
+        df_corr_filtered = df_corr.loc[high_corr_feats, high_corr_feats]
+        corr_matrix = df_corr_filtered
+
+        corr_map = sns.clustermap(corr_matrix, cmap='coolwarm',
+                                  annot=False, fmt=".2f", square=True, cbar=True,
+                                  xticklabels=True, yticklabels=True, figsize=(20,20))
+        
+        # Rotate tick and reduce fontsize for better readability
+        plt.setp(corr_map.ax_heatmap.get_xticklabels(), rotation=45, fontsize=6)
+        plt.setp(corr_map.ax_heatmap.get_yticklabels(), rotation=0, fontsize=6)
+
+        # Show every 3rd label for readability
+        for i, label in enumerate(corr_map.ax_heatmap.get_xticklabels()):
+            if i % 3 != 0:
+                label.set_visible(False)
+
+        for i, label in enumerate(corr_map.ax_heatmap.get_yticklabels()):
+            if i % 3 != 0:
+                label.set_visible(False)
+
+        plt.title('Feature Correlation Matrix')
+        plt.tight_layout()
+        plt.savefig('correlation_matrix.png', dpi=300) # High dpi for better readability
+
     
     def CalculateStats(self):
         """ Calculate and print dataset statistics."""
         # Load data (requires data to be in project)
         X_train = self.data["X_train"]
         y_train = self.data["y_train"]
+
+        X_test = self.data["X_test"]
+        y_test = self.data["y_test"]
+        
+        #Write to markdown file, to use with cml reports
+        with open('dataset_statistics.md', 'w') as f:
+            f.write("====== DATASET STATISTICS ======\n")
+            f.write('\n')
+            f.write("====== TRAINING SET STATISTICS ======\n")
+            f.write(f'Training samples: {X_train.shape[0]}\n')
+            f.write(f'Features: {X_train.shape[1]}\n')
+            f.write(f'Fraud cases: {np.sum(y_train)}\n')
+            f.write(f'Non-fraud cases: {len(y_train) - np.sum(y_train)}\n')
+            f.write('\n')
+            X_test = self.data["X_test"]
+            y_test = self.data["y_test"]
+            f.write("====== TEST SET STATISTICS ======\n")
+            f.write(f'Test samples: {X_test.shape[0]}\n')
+            f.write(f'Features: {X_test.shape[1]}\n')
+            f.write(f'Fraud cases: {np.sum(y_test)}\n')
+            f.write(f'Non-fraud cases: {len(y_test) - np.sum(y_test)}\n')
+            f.write('\n')
+        # Print to console as well
+
         print("====== TRAINING SET STATISTICS ======")
         print(f'Training samples: {X_train.shape[0]}')
         print(f'Features: {X_train.shape[1]}')
         print(f'Fraud cases: {np.sum(y_train)}')
         print(f'Non-fraud cases: {len(y_train) - np.sum(y_train)}')
         print('\n')
-
-        X_test = self.data["X_test"]
-        y_test = self.data["y_test"]
         print("====== TEST SET STATISTICS ======")
         print(f'Test samples: {X_test.shape[0]}')
+        print(f'Features: {X_test.shape[1]}')
         print(f'Fraud cases: {np.sum(y_test)}')
         print(f'Non-fraud cases: {len(y_test) - np.sum(y_test)}')
         print('\n')
-        # Feature statistics
 
 if __name__ == "__main__":
     config = Config()
@@ -86,3 +144,4 @@ if __name__ == "__main__":
     stats.CalculateStats()
     stats.ClassDistribution()
     stats.FeatureDistributions(['TransactionAmt', 'C1', 'C2', 'C3', 'C4', 'C5'])
+    stats.CorrelationMatrix()
