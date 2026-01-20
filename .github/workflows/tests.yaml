@@ -7,6 +7,13 @@ on:
     branches: [ master, main ]
   pull_request:
     branches: [ master, main ]
+    paths:
+      - '.github/workflows/tests.yaml'
+      - 'src/**'
+      - 'tests/**'
+      - 'requirements_tests.txt'
+      - 'requirements.txt'
+
 
 permissions: #Suggestion from https://github.com/actions/setup-python#caching-packages-dependencies
   contents: read #For checking out the repository code.
@@ -26,7 +33,7 @@ jobs:
       uses: actions/checkout@v5
     - name: Setup Python
       uses: actions/setup-python@v5
-      with: 
+      with:
         python-version: ${{ matrix.python-version }}
         cache: "pip" #Caching pip dependencies between runs to speed up workflow.
 
