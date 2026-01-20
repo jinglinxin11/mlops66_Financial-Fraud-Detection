@@ -5,6 +5,7 @@ from typing import List, Dict, Any
 import math
 import pandas as pd
 import seaborn as sns
+import os
 
 from src.features.preprocessor import FraudPreprocessor
 from src.config.settings import Config
@@ -15,6 +16,8 @@ class DatasetStatistics:
         self.preprocessor = FraudPreprocessor(config=config, verbose=verbose)
         self.data = self.preprocessor.fit_transform()
         self.verbose = verbose
+        self.save_dir = os.path.join(config.project_root, 'reports', 'figures')
+        os.makedirs(self.save_dir, exist_ok=True)
     
     def ClassDistribution(self):
         """ Plot class distribution in the dataset."""
@@ -35,7 +38,7 @@ class DatasetStatistics:
         ax[1].pie(sizes_test, labels=labels_test, autopct='%1.1f%%', startangle=140, colors =['orange', 'cornflowerblue'])
         ax[1].set_title('Test Set Class Distribution')
         plt.tight_layout()
-        plt.savefig('class_distribution.png')
+        plt.savefig(os.path.join(self.save_dir, 'class_distribution.png'), dpi=300)
     
     def FeatureDistributions(self, feature_names: List[str]):
         """ Plot distributions of specified features."""
@@ -58,7 +61,7 @@ class DatasetStatistics:
             ax.set_xlabel(feature_name)
             ax.set_ylabel('Frequency')
         plt.tight_layout()
-        plt.savefig('feature_distributions.png')
+        plt.savefig(os.path.join(self.save_dir, 'feature_distributions.png'), dpi=300)
 
     def CorrelationMatrix(self):
         """ Plot correlation matrix of features."""
@@ -93,7 +96,7 @@ class DatasetStatistics:
 
         plt.title('Feature Correlation Matrix')
         plt.tight_layout()
-        plt.savefig('correlation_matrix.png', dpi=300) # High dpi for better readability
+        plt.savefig(os.path.join(self.save_dir, 'correlation_matrix.png'), dpi=300) # High dpi for better readability
 
     
     def CalculateStats(self):
