@@ -50,9 +50,9 @@ class TestModelPrediction:
             eval_set=[(sample_preprocessed_data["X_valid"], sample_preprocessed_data["y_valid"])],
             max_epochs=1,
             patience=1,
-            batch_size= min(32, len(sample_preprocessed_data["X_train"])),
+            batch_size=min(32, len(sample_preprocessed_data["X_train"])),
             virtual_batch_size=min(16, len(sample_preprocessed_data["X_train"]) // 2),
-            num_workers=0 # Eliminate multiprocessing issues in tests (OS differences)
+            num_workers=0,  # Eliminate multiprocessing issues in tests (OS differences)
         )
 
         # Test prediction
@@ -73,9 +73,9 @@ class TestModelPrediction:
             eval_set=[(sample_preprocessed_data["X_valid"], sample_preprocessed_data["y_valid"])],
             max_epochs=1,
             patience=1,
-            batch_size= min(32, len(sample_preprocessed_data["X_train"])),
+            batch_size=min(32, len(sample_preprocessed_data["X_train"])),
             virtual_batch_size=min(16, len(sample_preprocessed_data["X_train"]) // 2),
-            num_workers=0 # Eliminate multiprocessing issues in tests (OS differences)
+            num_workers=0,  # Eliminate multiprocessing issues in tests (OS differences)
         )
 
         # Test probability prediction
