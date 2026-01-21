@@ -48,9 +48,10 @@ jobs:
           run: |
                 python src/data/dataset_statistics.py > dataset_statistics.md
                 mv dataset_statistics.md report.md
-                echo '![](./class_distribution.png "Class distributions")' >> dataset_statistics.md
-                echo '![](./feature_distributions.png "Feature distributions")' >> dataset_statistics.md
-                echo '![](./correlation_matrix.png "Correlation matrix")' >> dataset_statistics.md
+                echo '![](reports/figures/dataset_statistics.png)' >> report.md
+                echo '![](reports/figures/class_distribution.png "Class distributions")' >> report.md
+                echo '![](reports/figures/feature_distributions.png "Feature distributions")' >> report.md
+                echo '![](reports/figures/correlation_matrix.png "Correlation matrix")' >> report.md
 
         - name: Setup cml
           uses: iterative/setup-cml@v2
@@ -59,4 +60,4 @@ jobs:
           env:
             REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           run: |
-            cml comment create dataset_statistics.md --watermark-tile="Data checker" # (1)
+            cml comment create report.md --watermark-tile="Data checker" # (1)

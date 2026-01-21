@@ -10,13 +10,18 @@ import os
 from src.features.preprocessor import FraudPreprocessor
 from src.config.settings import Config
 
+# Ignore warnings for cleaner output
+import warnings
+warnings.filterwarnings("ignore")
 
 class DatasetStatistics:
+    """ Class for generating dataset statistics and visualizations."""
     def __init__(self, config: Config, verbose: bool = True):
+        """ Initialize with configuration and preprocess data."""
         self.preprocessor = FraudPreprocessor(config=config, verbose=verbose)
         self.data = self.preprocessor.fit_transform()
         self.verbose = verbose
-        self.save_dir = os.path.join(config.project_root, 'reports', 'figures')
+        self.save_dir = os.path.join(config.PROJECT_ROOT, 'reports', 'figures')
         os.makedirs(self.save_dir, exist_ok=True)
     
     def ClassDistribution(self):
@@ -146,5 +151,5 @@ if __name__ == "__main__":
     stats = DatasetStatistics(config)
     stats.CalculateStats()
     stats.ClassDistribution()
-    stats.FeatureDistributions(['TransactionAmt', 'C1', 'C2', 'C3', 'C4', 'C5'])
+    stats.FeatureDistributions(['TransactionAmt', 'C1', 'C2', 'C3', 'C4', 'C5']) # Example features for distribution plots
     stats.CorrelationMatrix()
