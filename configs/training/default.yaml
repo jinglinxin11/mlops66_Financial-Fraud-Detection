@@ -1,0 +1,22 @@
+# Default Training Configuration
+
+# Training parameters
+max_epochs: 100
+patience: 10
+batch_size: 8192
+virtual_batch_size: 256
+
+# Optimizer
+learning_rate: 0.005
+
+# Learning rate scheduler
+scheduler:
+  step_size: 50
+  gamma: 0.9
+
+# Checkpointing
+checkpoint_every: 10
+resume_training: true
+
+# Device
+device: auto  # 'auto', 'cuda', or 'cpu'

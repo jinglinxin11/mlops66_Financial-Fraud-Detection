@@ -16,6 +16,7 @@ def optimize_memory(df, verbose=True):
 
     Returns:
         pd.DataFrame: Optimized DataFrame
+
     """
     if verbose:
         print("\n" + "=" * 50)
@@ -47,6 +48,7 @@ def find_latest_checkpoint(checkpoint_dir):
 
     Returns:
         tuple: (latest checkpoint path, epoch number) or (None, 0)
+
     """
     if not os.path.exists(checkpoint_dir):
         return None, 0

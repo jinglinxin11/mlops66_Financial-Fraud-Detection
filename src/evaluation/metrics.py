@@ -19,6 +19,7 @@ def evaluate_model(model, X_test, y_test, feature_columns=None, verbose=True):
 
     Returns:
         dict: Evaluation results
+
     """
     if verbose:
         print("\n" + "=" * 60)
@@ -69,6 +70,7 @@ def get_feature_importance(model, feature_columns):
 
     Returns:
         pd.DataFrame: Feature importance table sorted by importance
+
     """
     return pd.DataFrame(
         {"feature": feature_columns, "importance": model.feature_importances_}

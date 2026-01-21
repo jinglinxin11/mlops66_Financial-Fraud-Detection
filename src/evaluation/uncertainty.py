@@ -14,6 +14,7 @@ class UncertaintyAnalyzer:
 
         Args:
             thresholds: Risk threshold dictionary.
+
         """
         self.thresholds = thresholds or {
             "high_risk": 0.8,
@@ -32,6 +33,7 @@ class UncertaintyAnalyzer:
 
         Returns:
             dict: Analysis results
+
         """
         if verbose:
             print("\n" + "=" * 60)
@@ -107,6 +109,7 @@ class UncertaintyAnalyzer:
 
         Returns:
             np.ndarray: Risk level array
+
         """
         risk_levels = np.where(
             proba >= self.thresholds["high_risk"],

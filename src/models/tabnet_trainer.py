@@ -3,33 +3,39 @@
 Encapsulates TabNet model creation, training, saving, and loading logic.
 """
 
+from typing import Any, Dict, Optional
+
 import torch
 from pytorch_tabnet.tab_model import TabNetClassifier
 
 from ..utils.helpers import find_latest_checkpoint
+from ..utils.logger import get_logger
 from .callbacks import CheckpointCallback
+
+# Module logger
+logger = get_logger(__name__)
 
 
 class TabNetTrainer:
     """TabNet Model Trainer."""
 
-    def __init__(self, config, data, verbose=True):
+    def __init__(self, config, data: Dict[str, Any], verbose: bool = True):
         """Initialize TabNetTrainer.
 
         Args:
-            config: Configuration object
-            data: Preprocessed data dictionary
-            verbose: Whether to print detailed information.
+        config: Configuration object
+        data: Preprocessed data dictionary
+        verbose: Whether to print detailed information.
         """
         self.config = config
         self.data = data
         self.verbose = verbose
-        self.model = None
+        self.model: Optional[TabNetClassifier] = None
 
-    def _log(self, message):
-        """Print log message."""
+    def _log(self, message: str):
+        """Log message using logging module."""
         if self.verbose:
-            print(message)
+            logger.info(message)
 
     def _create_model(self):
         """Create a new TabNet model."""
@@ -43,7 +49,7 @@ class TabNetTrainer:
             gamma=self.config.GAMMA,
             lambda_sparse=self.config.LAMBDA_SPARSE,
             optimizer_fn=torch.optim.Adam,
-            optimizer_params=dict(lr=self.config.LEARNING_RATE),
+            optimizer_params={"lr": self.config.LEARNING_RATE},
             scheduler_params={
                 "step_size": self.config.SCHEDULER_STEP_SIZE,
                 "gamma": self.config.SCHEDULER_GAMMA,
@@ -59,6 +65,7 @@ class TabNetTrainer:
 
         Returns:
             TabNetClassifier: Trained model
+
         """
         self._log("\n" + "=" * 60)
         self._log("              Model Training")
@@ -86,8 +93,9 @@ class TabNetTrainer:
                 remaining_epochs = self.config.MAX_EPOCHS - last_epoch
 
                 if remaining_epochs <= 0:
-                    max_ep = self.config.MAX_EPOCHS
-                    self._log(f"Training already complete ({last_epoch}/{max_ep} epochs)")
+                    self._log(
+                        f"✅ Training already complete ({last_epoch}/{self.config.MAX_EPOCHS} epochs)"
+                    )
                     return self.model
 
                 self._log(f"   Continuing training: {remaining_epochs} epochs remaining")

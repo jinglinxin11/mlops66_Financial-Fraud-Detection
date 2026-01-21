@@ -18,6 +18,7 @@ class CheckpointCallback(Callback):
         Args:
             save_path: Checkpoint save directory
             save_every: Save checkpoint every N epochs.
+
         """
         super().__init__()
         self.save_path = save_path

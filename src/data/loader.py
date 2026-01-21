@@ -17,6 +17,7 @@ class DataLoader:
 
         Args:
         verbose: Whether to print loading information.
+
         """
         self.verbose = verbose
 
@@ -33,6 +34,7 @@ class DataLoader:
 
         Returns:
             pd.DataFrame: Transaction data
+
         """
         path = Path(path)
         if not path.exists():
@@ -52,6 +54,7 @@ class DataLoader:
 
         Returns:
             pd.DataFrame or None: Identity data
+
         """
         path = Path(path)
         if not path.exists():
@@ -73,6 +76,7 @@ class DataLoader:
 
         Returns:
             pd.DataFrame: Merged data
+
         """
         self._log("=" * 50)
         self._log("Loading Data")
@@ -101,6 +105,7 @@ class DataLoader:
 
         Returns:
             pd.Series: Missing rate for each column
+
         """
         self._log("\n" + "=" * 50)
         self._log("Data Quality Analysis")
