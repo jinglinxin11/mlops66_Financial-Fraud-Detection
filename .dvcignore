@@ -1,0 +1,12 @@
+# .dvcignore - Files and directories to be ignored by DVC
+
+# Binary files
+*.pyc
+__pycache__
+
+# IDE
+.idea
+.vscode
+
+# Checkpoints (managed separately)
+# checkpoints/

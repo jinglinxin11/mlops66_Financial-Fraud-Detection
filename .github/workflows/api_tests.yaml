@@ -34,15 +34,13 @@ jobs:
         python-version: '3.11'
         cache: 'pip'
 
-    - name: Install PyTorch (CPU)
-      run: |
-        pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r requirements_tests.txt
+        pip install --extra-index-url https://download.pytorch.org/whl/cpu \
+        torch torchvision torchaudio \
+        -r requirements.txt \
+        -r requirements_tests.txt
 
     - name: Run API tests
       run: |
@@ -57,6 +55,13 @@ jobs:
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+
+    - name: Free up disk space
+      run: |
+        docker system prune -af
+        sudo rm -rf /usr/local/lib/python3.11/site-packages/*.dist-info
+        sudo apt-get clean
+        sudo rm -rf /var/lib/apt/lists/*
 
     - name: Build Docker image
       uses: docker/build-push-action@v5

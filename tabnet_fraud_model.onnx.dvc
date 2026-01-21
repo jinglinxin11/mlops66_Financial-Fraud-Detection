@@ -1,0 +1,5 @@
+outs:
+- md5: 4b9540ffa04d09b83ad915570bfd8e00
+  size: 5205557
+  hash: md5
+  path: tabnet_fraud_model.onnx

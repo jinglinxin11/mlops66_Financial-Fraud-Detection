@@ -1,0 +1,57 @@
+# IEEE-CIS Fraud Detection - Main Configuration
+# Managed by Hydra
+
+defaults:
+  - model: tabnet
+  - training: default
+  - _self_
+
+# =====================================
+# Path Configuration
+# =====================================
+paths:
+  data_dir: data
+  train_transaction: ${paths.data_dir}/train_transaction.csv
+  train_identity: ${paths.data_dir}/train_identity.csv
+  test_transaction: ${paths.data_dir}/test_transaction.csv
+  test_identity: ${paths.data_dir}/test_identity.csv
+  checkpoint_dir: checkpoints
+  model_path: tabnet_fraud_model
+  preprocessor_path: ieee_cis_preprocessor.pkl
+  submission_path: submission.csv
+
+# =====================================
+# Preprocessing Parameters
+# =====================================
+preprocessing:
+  missing_threshold: 0.9
+  rare_category_threshold: 100
+  use_time_split: true
+
+# =====================================
+# Uncertainty Analysis
+# =====================================
+uncertainty:
+  high_risk: 0.8
+  medium_high: 0.5
+  medium_low: 0.3
+  low_risk: 0.1
+
+# =====================================
+# Experiment Tracking
+# =====================================
+wandb:
+  enabled: true
+  project: ieee-cis-fraud-detection
+  entity: null  # Set to your wandb username/team
+  tags:
+    - tabnet
+    - fraud-detection
+
+# =====================================
+# Logging
+# =====================================
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: logs/training.log
