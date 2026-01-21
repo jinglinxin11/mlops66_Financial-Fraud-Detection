@@ -23,7 +23,7 @@ permissions:
 jobs:
   api-tests:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -34,15 +34,13 @@ jobs:
         python-version: '3.11'
         cache: 'pip'
 
-    - name: Install PyTorch (CPU)
-      run: |
-        pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r requirements_tests.txt
+        pip install --extra-index-url https://download.pytorch.org/whl/cpu \
+        torch torchvision torchaudio \
+        -r requirements.txt \
+        -r requirements_tests.txt
 
     - name: Run API tests
       run: |
@@ -50,13 +48,20 @@ jobs:
 
   docker-build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+
+    - name: Free up disk space
+      run: |
+        docker system prune -af
+        sudo rm -rf /usr/local/lib/python3.11/site-packages/*.dist-info
+        sudo apt-get clean
+        sudo rm -rf /var/lib/apt/lists/*
 
     - name: Build Docker image
       uses: docker/build-push-action@v5
@@ -72,22 +77,22 @@ jobs:
       run: |
         # Verify image was built
         docker images fraud-detection-api:test
-        
+
         # Start container in background
         docker run -d --name test-api -p 8000:8000 fraud-detection-api:test
-        
+
         # Wait for startup
         sleep 15
-        
+
         # Check container status
         docker ps -a
-        
+
         # Check logs
         docker logs test-api
-        
+
         # Test health endpoint
         curl -f http://localhost:8000/ || echo "Health check failed (expected without model)"
-        
+
         # Cleanup
         docker stop test-api || true
         docker rm test-api || true

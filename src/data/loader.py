@@ -3,9 +3,10 @@
 Responsible for loading and merging IEEE-CIS dataset.
 """
 
-import pandas as pd
 import gc
 from pathlib import Path
+
+import pandas as pd
 
 
 class DataLoader:
@@ -16,6 +17,7 @@ class DataLoader:
 
         Args:
         verbose: Whether to print loading information.
+
         """
         self.verbose = verbose
 
@@ -32,6 +34,7 @@ class DataLoader:
 
         Returns:
             pd.DataFrame: Transaction data
+
         """
         path = Path(path)
         if not path.exists():
@@ -51,6 +54,7 @@ class DataLoader:
 
         Returns:
             pd.DataFrame or None: Identity data
+
         """
         path = Path(path)
         if not path.exists():
@@ -72,6 +76,7 @@ class DataLoader:
 
         Returns:
             pd.DataFrame: Merged data
+
         """
         self._log("=" * 50)
         self._log("Loading Data")
@@ -100,6 +105,7 @@ class DataLoader:
 
         Returns:
             pd.Series: Missing rate for each column
+
         """
         self._log("\n" + "=" * 50)
         self._log("Data Quality Analysis")
@@ -112,23 +118,21 @@ class DataLoader:
         # Target distribution
         if target in df.columns:
             fraud_rate = df[target].mean()
-            self._log(f"\nTarget distribution:")
+            self._log("\nTarget distribution:")
             self._log(f"  Normal transactions: {(1 - fraud_rate) * 100:.2f}%")
-            self._log(
-                f"  Fraud transactions: {fraud_rate * 100:.2f}% ⚠️ Highly imbalanced"
-            )
+            self._log(f"  Fraud transactions: {fraud_rate * 100:.2f}% ⚠️ Highly imbalanced")
 
         # Missing value analysis
         import numpy as np
 
         missing = df.isnull().mean()
-        self._log(f"\nMissing value analysis:")
+        self._log("\nMissing value analysis:")
         self._log(f"  Columns with no missing: {(missing == 0).sum()}")
         self._log(f"  Columns with >50% missing: {(missing > 0.5).sum()}")
         self._log(f"  Columns with >90% missing: {(missing > 0.9).sum()}")
 
         # Data types
-        self._log(f"\nData types:")
+        self._log("\nData types:")
         self._log(f"  Numerical: {df.select_dtypes(include=[np.number]).shape[1]}")
         self._log(f"  Categorical: {df.select_dtypes(include=['object']).shape[1]}")
 

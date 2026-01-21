@@ -1,0 +1,10 @@
+# TabNet Model Configuration
+
+# Model architecture
+n_d: 48                    # Decision layer width
+n_a: 48                    # Attention layer width
+n_steps: 4                 # Number of decision steps
+gamma: 1.5                 # Feature reuse coefficient
+cat_emb_dim: 2             # Categorical embedding dimension
+lambda_sparse: 0.001       # Sparsity regularization
+mask_type: entmax          # Mask type: 'sparsemax' or 'entmax'

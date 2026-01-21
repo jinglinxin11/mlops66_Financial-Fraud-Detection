@@ -15,6 +15,7 @@ class FeatureEncoder:
         Args:
             rare_category_threshold: Rare category threshold
             verbose: Whether to print information.
+
         """
         self.rare_category_threshold = rare_category_threshold
         self.verbose = verbose
@@ -43,6 +44,7 @@ class FeatureEncoder:
 
         Returns:
             list: List of feature column names
+
         """
         self._log("\n" + "=" * 50)
         self._log("Identifying Feature Types")
@@ -82,6 +84,7 @@ class FeatureEncoder:
 
         Returns:
             pd.DataFrame: Processed DataFrame
+
         """
         self._log("\n" + "=" * 50)
         self._log("Handling Rare Categories")
@@ -108,6 +111,7 @@ class FeatureEncoder:
 
         Returns:
             pd.DataFrame: Encoded DataFrame
+
         """
         self._log("\n" + "=" * 50)
         self._log("Feature Encoding (Training)")
@@ -148,6 +152,7 @@ class FeatureEncoder:
 
         Returns:
             pd.DataFrame: Encoded DataFrame
+
         """
         self._log("\nEncoding features...")
 

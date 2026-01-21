@@ -10,7 +10,7 @@ echo "=== Fraud Detection API Container ==="
 if [ -n "$GCP_BUCKET" ]; then
     echo "GCP_BUCKET is set: $GCP_BUCKET"
     echo "Downloading data and model from GCP..."
-    
+
     # Run the download script
     python -c "
 from google.cloud import storage

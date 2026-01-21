@@ -1,7 +1,6 @@
 # IEEE-CIS Fraud Detection with TabNet
 
-A financial fraud detection system using TabNet deep learning model for the
-[IEEE-CIS Fraud Detection Kaggle Competition](https://www.kaggle.com/c/ieee-fraud-detection).
+A financial fraud detection system using TabNet deep learning model for the [IEEE-CIS Fraud Detection Kaggle Competition](https://www.kaggle.com/c/ieee-fraud-detection).
 
 ## ✨ Features
 
@@ -11,6 +10,9 @@ A financial fraud detection system using TabNet deep learning model for the
 - 📈 **Uncertainty Analysis** - Prediction confidence stratification
 - 🎯 **Class Imbalance Handling** - Automatic class weight calculation
 - 🌐 **FastAPI Inference API (M22)** - Run inference through a simple API endpoint
+- ⚙️ **Hydra Configuration** - Flexible YAML-based configuration management
+- 📝 **Weights & Biases** - Experiment tracking and hyperparameter sweeps
+
 
 ## 📁 Project Structure
 ```bash
