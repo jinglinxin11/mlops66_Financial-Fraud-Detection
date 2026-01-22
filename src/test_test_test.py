@@ -1,1 +1,3 @@
-print('1234')
+"""Testing workflow."""
+
+print("1234")
