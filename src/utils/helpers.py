@@ -30,6 +30,8 @@ def optimize_memory(df, verbose=True):
             df[col] = df[col].astype("float32")
         elif df[col].dtype == "int64":
             df[col] = df[col].astype("int32")
+        elif df[col].dtype == "object":
+            continue # Skip object types
 
     after_mem = df.memory_usage(deep=True).sum() / 1024**2
 

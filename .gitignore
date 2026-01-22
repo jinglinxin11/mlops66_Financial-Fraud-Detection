@@ -21,7 +21,6 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-*.coverage
 
 # Virtual environments
 venv/
@@ -75,3 +74,4 @@ Thumbs.db
 /tabnet_fraud_model.onnx
 /tabnet_fraud_model.zip
 /checkpoints
+.coverage
