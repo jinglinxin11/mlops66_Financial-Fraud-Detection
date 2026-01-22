@@ -1,0 +1,183 @@
+"""Module for generating dataset statistics and visualizations."""
+
+import math
+import os
+
+# Ignore warnings for cleaner output
+import warnings
+from collections import Counter
+from typing import List
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
+from src.config.settings import Config
+from src.features.preprocessor import FraudPreprocessor
+
+warnings.filterwarnings("ignore")
+
+
+class DatasetStatistics:
+    """Class for generating dataset statistics and visualizations."""
+
+    def __init__(self, config: Config, verbose: bool = True):
+        """Initialize with configuration and preprocess data."""
+        self.preprocessor = FraudPreprocessor(config=config, verbose=verbose)
+        self.data = self.preprocessor.fit_transform()
+        self.verbose = verbose
+        self.save_dir = os.path.join(config.PROJECT_ROOT, "reports", "figures")
+        os.makedirs(self.save_dir, exist_ok=True)
+
+    def ClassDistribution(self):
+        """Plot class distribution in the dataset."""
+        y_train = self.data["y_train"]
+        y_test = self.data["y_test"]
+        counter_train = Counter(y_train)
+        counter_test = Counter(y_test)
+
+        labels_train = list(counter_train.keys())
+        sizes_train = list(counter_train.values())
+
+        labels_test = list(counter_test.keys())
+        sizes_test = list(counter_test.values())
+
+        fig, ax = plt.subplots(1, 2, figsize=(12, 5))
+        ax[0].pie(
+            sizes_train,
+            labels=labels_train,
+            autopct="%1.1f%%",
+            startangle=140,
+            colors=["cornflowerblue", "orange"],
+        )
+        ax[0].set_title("Training Set Class Distribution")
+        ax[1].pie(
+            sizes_test,
+            labels=labels_test,
+            autopct="%1.1f%%",
+            startangle=140,
+            colors=["orange", "cornflowerblue"],
+        )
+        ax[1].set_title("Test Set Class Distribution")
+        plt.tight_layout()
+        plt.savefig(os.path.join(self.save_dir, "class_distribution.png"), dpi=300)
+
+    def FeatureDistributions(self, feature_names: List[str]):
+        """Plot distributions of specified features."""
+        X_train = self.data["X_train"]
+        feature_columns = self.data["feature_columns"]
+        feature_indices = {name: idx for idx, name in enumerate(feature_columns)}
+        num_features = len(feature_names)
+        cols = 2
+        rows = math.ceil(num_features / cols)
+        fig, axes = plt.subplots(rows, cols, figsize=(12, 5 * rows))
+
+        for i, feature_name in enumerate(feature_names):
+            if feature_name not in feature_indices:
+                print(f"Feature {feature_name} not found in dataset.")
+                continue
+            idx = feature_indices[feature_name]
+            ax = axes[i // cols, i % cols] if rows > 1 else axes[i % cols]
+            ax.hist(X_train[:, idx], bins=50, color="cornflowerblue", alpha=0.7, log=True)
+            ax.set_title(f"Distribution of {feature_name}")
+            ax.set_xlabel(feature_name)
+            ax.set_ylabel("Frequency")
+        plt.tight_layout()
+        plt.savefig(os.path.join(self.save_dir, "feature_distributions.png"), dpi=300)
+
+    def CorrelationMatrix(self):
+        """Plot correlation matrix of features."""
+        X_train = self.data["X_train"]
+        feature_columns = self.data["feature_columns"]
+        corr_matrix = np.corrcoef(X_train, rowvar=False)
+
+        # Converting to dataframe
+        df_corr = pd.DataFrame(corr_matrix, index=feature_columns, columns=feature_columns)
+
+        # Filtering to show only strong correlations
+        high_corr_feats = df_corr.columns[(df_corr.abs() > 0.7).sum() > 1]
+        df_corr_filtered = df_corr.loc[high_corr_feats, high_corr_feats]
+        corr_matrix = df_corr_filtered
+
+        corr_map = sns.clustermap(
+            corr_matrix,
+            cmap="coolwarm",
+            annot=False,
+            fmt=".2f",
+            square=True,
+            cbar=True,
+            xticklabels=True,
+            yticklabels=True,
+            figsize=(20, 20),
+        )
+
+        # Rotate tick and reduce fontsize for better readability
+        plt.setp(corr_map.ax_heatmap.get_xticklabels(), rotation=45, fontsize=6)
+        plt.setp(corr_map.ax_heatmap.get_yticklabels(), rotation=0, fontsize=6)
+
+        # Show every 3rd label for readability
+        for i, label in enumerate(corr_map.ax_heatmap.get_xticklabels()):
+            if i % 3 != 0:
+                label.set_visible(False)
+
+        for i, label in enumerate(corr_map.ax_heatmap.get_yticklabels()):
+            if i % 3 != 0:
+                label.set_visible(False)
+
+        plt.title("Feature Correlation Matrix")
+        plt.tight_layout()
+        plt.savefig(
+            os.path.join(self.save_dir, "correlation_matrix.png"), dpi=300
+        )  # High dpi for better readability
+
+    def CalculateStats(self):
+        """Calculate and print dataset statistics."""
+        # Load data (requires data to be in project)
+        X_train = self.data["X_train"]
+        y_train = self.data["y_train"]
+
+        X_test = self.data["X_test"]
+        y_test = self.data["y_test"]
+
+        # Write to markdown file, to use with cml reports
+        with open("dataset_statistics.md", "w") as f:
+            f.write("====== DATASET STATISTICS ======\n")
+            f.write("\n")
+            f.write("====== TRAINING SET STATISTICS ======\n")
+            f.write(f"Training samples: {X_train.shape[0]}\n")
+            f.write(f"Features: {X_train.shape[1]}\n")
+            f.write(f"Fraud cases: {np.sum(y_train)}\n")
+            f.write(f"Non-fraud cases: {len(y_train) - np.sum(y_train)}\n")
+            f.write("\n")
+            f.write("====== TEST SET STATISTICS ======\n")
+            f.write(f"Test samples: {X_test.shape[0]}\n")
+            f.write(f"Features: {X_test.shape[1]}\n")
+            f.write(f"Fraud cases: {np.sum(y_test)}\n")
+            f.write(f"Non-fraud cases: {len(y_test) - np.sum(y_test)}\n")
+            f.write("\n")
+        # Print to console as well
+
+        print("====== TRAINING SET STATISTICS ======")
+        print(f"Training samples: {X_train.shape[0]}")
+        print(f"Features: {X_train.shape[1]}")
+        print(f"Fraud cases: {np.sum(y_train)}")
+        print(f"Non-fraud cases: {len(y_train) - np.sum(y_train)}")
+        print("\n")
+        print("====== TEST SET STATISTICS ======")
+        print(f"Test samples: {X_test.shape[0]}")
+        print(f"Features: {X_test.shape[1]}")
+        print(f"Fraud cases: {np.sum(y_test)}")
+        print(f"Non-fraud cases: {len(y_test) - np.sum(y_test)}")
+        print("\n")
+
+
+if __name__ == "__main__":
+    config = Config()
+    stats = DatasetStatistics(config)
+    stats.CalculateStats()
+    stats.ClassDistribution()
+    stats.FeatureDistributions(
+        ["TransactionAmt", "C1", "C2", "C3", "C4", "C5"]
+    )  # Example features for distribution plots
+    stats.CorrelationMatrix()

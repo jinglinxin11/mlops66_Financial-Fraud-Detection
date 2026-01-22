@@ -3,6 +3,7 @@
 Handles encoding of categorical and numerical features.
 """
 
+from pandas.api.types import is_object_dtype, is_string_dtype
 from sklearn.preprocessing import LabelEncoder
 
 
@@ -60,7 +61,7 @@ class FeatureEncoder:
             if col in exclude_cols:
                 continue
 
-            if df[col].dtype == "object":
+            if is_object_dtype(df[col]) or is_string_dtype(df[col]):
                 self.categorical_columns.append(col)
             elif df[col].nunique() < 50 and df[col].dtype in ["int64", "int32"]:
                 # Integer columns with fewer than 50 unique values are treated as categorical

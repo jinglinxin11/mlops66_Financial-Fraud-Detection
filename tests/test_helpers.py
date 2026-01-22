@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+from pandas.api.types import is_object_dtype, is_string_dtype
 
 from src.utils.helpers import find_latest_checkpoint, optimize_memory
 
@@ -34,7 +35,9 @@ def test_optimize_memory_dtypes():
     assert df_opt["int_col"].dtype == "int32", (
         f"Int64 should be converted to int32. Got {df_opt['int_col'].dtype}"
     )
-    assert df_opt["obj_col"].dtype == "object", "Object columns should remain unchanged"
+    assert is_object_dtype(df_opt["obj_col"]) or is_string_dtype(df_opt["obj_col"]), (
+        "Object column should remain as object/string type"
+    )
 
 
 def test_optimize_memory_values_preserved():

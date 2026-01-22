@@ -21,7 +21,6 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-*.coverage
 
 # Virtual environments
 venv/
@@ -47,7 +46,7 @@ tabnet_fraud_model.zip
 
 
 # DVC - Data files tracked by DVC
-/data/
+/data/*
 
 # Model outputs (optional, can also track with DVC)
 *.pkl
@@ -75,3 +74,4 @@ Thumbs.db
 /tabnet_fraud_model.onnx
 /tabnet_fraud_model.zip
 /checkpoints
+.coverage
