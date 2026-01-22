@@ -1,0 +1,5 @@
+[core]
+    autostage = true
+    remote = local_backup
+['remote "local_backup"']
+    url = C:\Users\jingl\dvc_storage

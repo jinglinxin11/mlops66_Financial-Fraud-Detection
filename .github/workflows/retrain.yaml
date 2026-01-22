@@ -1,0 +1,46 @@
+name: Retrain Model
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
+
+jobs:
+  train-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          # Install torch CPU for training in CI
+          pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Train Model
+        run: |
+          python train.py
+          
+      - name: DVC Push (Optional)
+        env:
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
+        run: |
+          # dvc pull
+          # dvc repro
+          # dvc push
+          echo "DVC steps would go here"
+
+      - name: Commit and Push if changed
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add checkpoints/*.zip
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-retrain model [skip ci]" && git push)

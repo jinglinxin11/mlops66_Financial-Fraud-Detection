@@ -1,0 +1,5 @@
+outs:
+- md5: cecfdd35f8c0e22e72340db248933b4d
+  size: 1494854
+  hash: md5
+  path: tabnet_fraud_model.zip

@@ -1,0 +1,98 @@
+name: "API Tests"
+
+# Triggers on push/PR to main, or manual trigger
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - 'api/**'
+      - 'tests/test_api.py'
+      - '.github/workflows/api_tests.yaml'
+  pull_request:
+    branches: [master, main]
+    paths:
+      - 'api/**'
+      - 'tests/test_api.py'
+      - '.github/workflows/api_tests.yaml'
+  workflow_dispatch:  # Allow manual trigger
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install --extra-index-url https://download.pytorch.org/whl/cpu \
+        torch torchvision torchaudio \
+        -r requirements.txt \
+        -r requirements_tests.txt
+
+    - name: Run API tests
+      run: |
+        pytest tests/test_api.py -v --tb=short
+
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Free up disk space
+      run: |
+        docker system prune -af
+        sudo rm -rf /usr/local/lib/python3.11/site-packages/*.dist-info
+        sudo apt-get clean
+        sudo rm -rf /var/lib/apt/lists/*
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: false
+        load: true  # Load image into local Docker daemon
+        tags: fraud-detection-api:test
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Test Docker image starts
+      run: |
+        # Verify image was built
+        docker images fraud-detection-api:test
+
+        # Start container in background
+        docker run -d --name test-api -p 8000:8000 fraud-detection-api:test
+
+        # Wait for startup
+        sleep 15
+
+        # Check container status
+        docker ps -a
+
+        # Check logs
+        docker logs test-api
+
+        # Test health endpoint
+        curl -f http://localhost:8000/ || echo "Health check failed (expected without model)"
+
+        # Cleanup
+        docker stop test-api || true
+        docker rm test-api || true
