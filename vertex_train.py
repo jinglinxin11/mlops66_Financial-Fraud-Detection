@@ -38,22 +38,18 @@ def parse_args():
     parser.add_argument(
         "--machine-type", type=str, default="n1-standard-8", help="GCP machine type"
     )
-    parser.add_argument(
-        "--gpu-type", type=str, default="NVIDIA_TESLA_T4", help="GPU type"
-    )
+    parser.add_argument("--gpu-type", type=str, default="NVIDIA_TESLA_T4", help="GPU type")
     parser.add_argument("--gpu-count", type=int, default=1, help="Number of GPUs")
     parser.add_argument("--no-gpu", action="store_true", help="Run without GPU")
-    parser.add_argument(
-        "--local", action="store_true", help="Build and test locally first"
-    )
+    parser.add_argument("--local", action="store_true", help="Build and test locally first")
     return parser.parse_args()
 
 
 def run_command(cmd, description):
     """Run a shell command and handle errors."""
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"  {description}")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"Command: {' '.join(cmd)}\n")
 
     result = subprocess.run(cmd, capture_output=False)
