@@ -18,7 +18,6 @@ import subprocess
 import sys
 from datetime import datetime
 
-
 # Configuration
 PROJECT_ID = "machinelearningops66"
 REGION = "europe-west1"
@@ -129,10 +128,6 @@ def main():
     if not args.no_gpu:
         cmd[-1] += f",accelerator-type={args.gpu_type},accelerator-count={args.gpu_count}"
 
-    # Add environment variables and training args
-    env_vars = f"GCP_BUCKET={BUCKET}"
-    train_args = f"--max-epochs={args.max_epochs},--batch-size={args.batch_size}"
-
     # Note: Environment variables are passed via the container
     # We need to modify the command to include env vars properly
     cmd = [
@@ -145,7 +140,9 @@ def main():
     ]
 
     # Build worker pool spec
-    worker_spec = f"machine-type={args.machine_type},replica-count=1,container-image-uri={image_uri}"
+    worker_spec = (
+        f"machine-type={args.machine_type},replica-count=1,container-image-uri={image_uri}"
+    )
 
     if not args.no_gpu:
         worker_spec += f",accelerator-type={args.gpu_type},accelerator-count={args.gpu_count}"
@@ -163,11 +160,11 @@ def main():
     print("\n" + "=" * 60)
     print("   Job Submitted Successfully!")
     print("=" * 60)
-    print(f"\nMonitor your job at:")
+    print("\nMonitor your job at:")
     print(f"  https://console.cloud.google.com/vertex-ai/training/custom-jobs?project={PROJECT_ID}")
-    print(f"\nOr via CLI:")
+    print("\nOr via CLI:")
     print(f"  gcloud ai custom-jobs list --region={REGION}")
-    print(f"\nAfter completion, model will be uploaded to:")
+    print("\nAfter completion, model will be uploaded to:")
     print(f"  gs://{BUCKET}/models/tabnet_fraud_model.zip")
 
 
