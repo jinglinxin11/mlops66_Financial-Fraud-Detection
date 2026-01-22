@@ -1,0 +1,49 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'Build container image'
+  args: [
+    'build',
+    '-t', 'europe-west1-docker.pkg.dev/$PROJECT_ID/fraud-detection/api/fraud-detection-api:latest',
+    '-t', 'europe-west1-docker.pkg.dev/$PROJECT_ID/fraud-detection/api/fraud-detection-api:${_SHORT_SHA}', # Tag with SHA
+    '-f', 'Dockerfile',
+    '.'
+  ]
+- name: 'gcr.io/cloud-builders/docker'
+  id: 'Push container image'
+  args: [
+    'push',
+    'europe-west1-docker.pkg.dev/$PROJECT_ID/fraud-detection/api/fraud-detection-api'
+  ]
+
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  id: 'Show Build Summary'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      echo "=== BUILD SUMMARY ==="
+      gcloud artifacts docker images describe europe-west1-docker.pkg.dev/$PROJECT_ID/fraud-detection/api/fraud-detection-api:latest --format='value(image_summary.fully_qualified_digest)'
+      echo "Image Size & Details available in Artifact Registry."
+
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  id: 'Deploy to Cloud Run'
+  entrypoint: gcloud
+  args:
+    - 'run'
+    - 'deploy'
+    - 'fraud-detection-api' # Service name on Cloud Run
+    - '--image'
+    - 'europe-west1-docker.pkg.dev/$PROJECT_ID/fraud-detection/api/fraud-detection-api:latest'
+    - '--region'
+    - 'europe-west1'
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated'
+    - '--set-env-vars'
+    - 'GCP_BUCKET=databucketmlops66'
+images:
+  - 'europe-west1-docker.pkg.dev/$PROJECT_ID/fraud-detection/api/fraud-detection-api:latest'
+  - 'europe-west1-docker.pkg.dev/$PROJECT_ID/fraud-detection/api/fraud-detection-api:$SHORT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
