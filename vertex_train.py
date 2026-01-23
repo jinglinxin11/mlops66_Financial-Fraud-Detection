@@ -14,8 +14,11 @@ Options:
 """
 
 import argparse
+import os
+import platform
 import subprocess
 import sys
+import tempfile
 from datetime import datetime
 
 # Configuration
@@ -52,7 +55,14 @@ def run_command(cmd, description):
     print(f"{'=' * 60}")
     print(f"Command: {' '.join(cmd)}\n")
 
-    result = subprocess.run(cmd, capture_output=False)
+    # On Windows, use gcloud.cmd instead of gcloud
+    if platform.system() == "Windows" and len(cmd) > 0 and cmd[0] == "gcloud":
+        cmd[0] = "gcloud.cmd"
+
+    # Use shell=True on Windows for better command execution
+    use_shell = platform.system() == "Windows"
+    
+    result = subprocess.run(cmd, capture_output=False, shell=use_shell)
     if result.returncode != 0:
         print(f"Error: {description} failed with code {result.returncode}")
         sys.exit(result.returncode)
@@ -106,52 +116,51 @@ def main():
     )
 
     # Step 4: Submit Vertex AI job
-    # Build the gcloud command
-    cmd = [
-        "gcloud",
-        "ai",
-        "custom-jobs",
-        "create",
-        f"--region={REGION}",
-        f"--display-name={job_name}",
-        f"--worker-pool-spec="
-        f"machine-type={args.machine_type},"
-        f"replica-count=1,"
-        f"container-image-uri={image_uri}",
-    ]
-
-    # Add GPU if requested
+    # Create temporary YAML config file for environment variables
+    # (gcloud ai custom-jobs create doesn't support --env-vars flag)
+    # Build YAML config with proper structure
+    config_yaml = "workerPoolSpecs:\n"
+    config_yaml += "  - machineSpec:\n"
+    config_yaml += f"      machineType: {args.machine_type}\n"
+    
     if not args.no_gpu:
-        cmd[-1] += f",accelerator-type={args.gpu_type},accelerator-count={args.gpu_count}"
+        config_yaml += f"      acceleratorType: {args.gpu_type}\n"
+        config_yaml += f"      acceleratorCount: {args.gpu_count}\n"
+    
+    config_yaml += "    replicaCount: 1\n"
+    config_yaml += "    containerSpec:\n"
+    config_yaml += f"      imageUri: {image_uri}\n"
+    config_yaml += "      env:\n"
+    config_yaml += "        - name: GCP_BUCKET\n"
+    config_yaml += f"          value: {BUCKET}\n"
+    config_yaml += "      args:\n"
+    config_yaml += f"        - \"--max-epochs={args.max_epochs}\"\n"
+    config_yaml += f"        - \"--batch-size={args.batch_size}\"\n"
 
-    # Note: Environment variables are passed via the container
-    # We need to modify the command to include env vars properly
-    cmd = [
-        "gcloud",
-        "ai",
-        "custom-jobs",
-        "create",
-        f"--region={REGION}",
-        f"--display-name={job_name}",
-    ]
+    # Write config to temporary file
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+        f.write(config_yaml)
+        config_file = f.name
 
-    # Build worker pool spec
-    worker_spec = (
-        f"machine-type={args.machine_type},replica-count=1,container-image-uri={image_uri}"
-    )
+    try:
+        # Build the gcloud command with config file
+        cmd = [
+            "gcloud",
+            "ai",
+            "custom-jobs",
+            "create",
+            f"--region={REGION}",
+            f"--display-name={job_name}",
+            f"--config={config_file}",
+        ]
 
-    if not args.no_gpu:
-        worker_spec += f",accelerator-type={args.gpu_type},accelerator-count={args.gpu_count}"
-
-    cmd.append(f"--worker-pool-spec={worker_spec}")
-
-    # Add environment variables
-    cmd.append(f"--env-vars=GCP_BUCKET={BUCKET}")
-
-    # Add training arguments
-    cmd.append(f"--args=--max-epochs={args.max_epochs},--batch-size={args.batch_size}")
-
-    run_command(cmd, "Submitting Vertex AI training job")
+        run_command(cmd, "Submitting Vertex AI training job")
+    finally:
+        # Clean up temporary config file
+        try:
+            os.unlink(config_file)
+        except Exception:
+            pass  # Ignore cleanup errors
 
     print("\n" + "=" * 60)
     print("   Job Submitted Successfully!")
