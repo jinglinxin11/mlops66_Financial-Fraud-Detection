@@ -1,0 +1,30 @@
+{
+    "policies": [
+        {
+            "name": "high_latency",
+            "metric": "http_request_duration_seconds_bucket",
+            "condition": "p95 > 0.5",
+            "duration": "5m",
+            "severity": "warning"
+        },
+        {
+            "name": "high_error_rate",
+            "metric": "http_requests_total",
+            "filter": "status=~'5..'",
+            "condition": "rate > 0.01",
+            "duration": "1m",
+            "severity": "critical"
+        },
+        {
+            "name": "data_drift",
+            "metric": "drift_score",
+            "condition": "value > 0.3",
+            "severity": "info",
+            "action": "trigger_retrain"
+        }
+    ],
+    "notification_channels": [
+        "email",
+        "slack"
+    ]
+}

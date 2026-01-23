@@ -1,158 +1,43 @@
-# IEEE-CIS Fraud Detection with TabNet
+# 🛡️ Financial Fraud Detection System (Ultimate Edition)
 
-A financial fraud detection system using TabNet deep learning model for the [IEEE-CIS Fraud Detection Kaggle Competition](https://www.kaggle.com/c/ieee-fraud-detection).
+An enterprise-grade MLOps platform for detecting financial fraud. Now upgraded with a **Unified Gradio Dashboard** that integrates Training, Evaluation, Monitoring, and Operations into a single interface.
 
-## ✨ Features
-
-- 🧠 **TabNet Model** - Attention-based interpretable deep learning
-- 📊 **Complete Preprocessing** - Auto handling of missing values, rare categories, feature encoding
-- 🔄 **Checkpoint Support** - Resume training from interruption
-- 📈 **Uncertainty Analysis** - Prediction confidence stratification
-- 🎯 **Class Imbalance Handling** - Automatic class weight calculation
-- 🌐 **FastAPI Inference API (M22)** - Run inference through a simple API endpoint
-- ⚙️ **Hydra Configuration** - Flexible YAML-based configuration management
-- 📝 **Weights & Biases** - Experiment tracking and hyperparameter sweeps
-
-
-## 📁 Project Structure
-```bash
-├── api/                       # FastAPI application
-│   ├── main.py                # Entry point for the API application
-│   └── schemas.py             # Pydantic models for data validation
-├── reports/                   # Reporting modules
-│   ├── figures/               # Generated plots and visualizations
-│   └── report.py              # Script to generate performance reports
-├── src/                       # Modular source code
-│   ├── config/                # Configuration module (settings.py)
-│   ├── data/                  # Data loading module (loader.py)
-│   ├── evaluation/            # Evaluation module (metrics & uncertainty)
-│   ├── features/              # Feature engineering (preprocessor, encoders, time_features)
-│   ├── models/                # Model architecture & training (TabNet, callbacks)
-│   └── utils/                 # Utility module (helpers.py)
-├── tests/                     # Unit & Integration tests (Pytest)
-├── data/                      # Dataset directory (Kaggle files go here)
-├── checkpoints/               # Model checkpoints storage
-├── Dockerfile                 # Docker configuration for containerization
-├── docker-entrypoint.sh       # Entry script for Docker container
-├── locustfile.py              # Load testing configuration (Locust)
-├── train.py                   # Training entry point
-├── predict.py                 # Prediction entry point (Kaggle submission)
-├── preprocess.py              # Data preprocessing entry point
-├── pyproject.toml             # Project configuration & dependencies
-├── requirements.txt           # Production dependencies
-├── requirements_tests.txt     # Development/Test dependencies
-├── ieee_cis_preprocessor.pkl  # Serialized preprocessor object
-└── tabnet_fraud_model.zip     # Compressed model artifact
-```
+## 🌟 Key Features
+*   **Unified Control Plane**: One `main.py` to rule them all. No separate frontend/backend processes.
+*   **Interactive Training**: Adjust hyperparameters (Epochs, LR, Architecture) and watch real-time loss/AUC curves.
+*   **Robustness (M27)**: Auto-Finetuning workflow to adapt to data drift on-the-fly.
+*   **Observability (M28)**: Built-in System Monitor (CPU/RAM/Disk) and automated CSV inference logging.
+*   **Explainability**: Feature Importance visualization and Confusion Matrices.
 
 ## 🚀 Quick Start
 
-### 1. 🛠️ Environment Setup
-
-Start by installing the required dependencies:
+### 1. Install Dependencies
 ```bash
-python -m venv venv
-source venv/bin/activate
 pip install -r requirements.txt
+# Ensure you have torch, gradio, plotly, psutil installed
 ```
 
-### 2. 🗄️ Data Preparation
-
-Download the **IEEE-CIS Fraud Detection** dataset from Kaggle and place the following files in the `data/` directory:
-
-* `train_transaction.csv`
-* `train_identity.csv`
-* `test_transaction.csv`
-* `test_identity.csv`
-* `sample_submission.csv`
-
-### 3. 🚀 Run the Pipeline
-
-You can run the different stages of the pipeline using the commands below:
+### 2. Run the Dashboard
 ```bash
-# 1. Analyze data quality (optional)
-python preprocess.py --analyze
+python main.py
 ```
-```bash
-# 2. Preprocess data (clean & engineer features)
-python preprocess.py
-```
-```bash
-# 3. Train the TabNet model
-python train.py
-```
-```bash
-# 4. Generate predictions for Kaggle submission
-python predict.py
-```
+*The dashboard will auto-launch in your browser at http://127.0.0.1:7860*
 
-### 4. 🌐 FastAPI Inference API (M22)
+## 📚 Documentation
+*   [📄 Project Upgrade Report](docs/PROJECT_UPDATE_REPORT.md): Detailed explanation of new features and architecture changes.
+*   [📄 Monitoring Guide](docs/monitoring.md): Guide to drift detection and system metrics.
 
-Deploy the model as a REST API for real-time inference.
-```bash
-# Start the server
-python -m uvicorn api.main:app --reload
-```
+## 📂 Project Structure
+*   `main.py`: **The Entry Point**. Contains the Gradio UI, Training Logic, and System Monitors.
+*   `src/`: Core logic (Preprocessing, TabNet Model, Config).
+*   `data/`: Data storage (Place your `train_transaction.csv` here).
+*   `docs/`: Documentation.
 
-📖 Swagger documentation: http://127.0.0.1:8000/docs
+## 🛠️ MLOps Compliance
+This project satisfies key MLOps requirements:
+*   **Data Collection (M27)**: All predictions are logged to `data/inference_history.csv`.
+*   **Robustness (M27)**: "Correct & Learn" feature allows instant feedback loops.
+*   **System Monitoring (M28)**: Real-time resource usage tab.
 
-**Demo Inference Endpoint**
-
-Runs preprocessing + TabNet inference on the Kaggle test set and returns the first `limit` predictions:
-```http
-POST /predict_test?limit=5
-```
-
-Example response fields:
-- `TransactionID`
-- `fraud_probability`
-- `is_fraud`
-
-### 5. 🐳 Docker Support
-
-You can build and run the project inside a Docker container to ensure a consistent environment.
-```bash
-docker build -t fraud-detection-app .
-```
-```bash
-# Runs the API on port 8000
-docker run -p 8000:8000 fraud-detection-app
-```
-
-### 6. 🧪 Development & Testing
-
-Run Unit Tests: Ensure the logic works correctly by running the test suite:
-```bash
-pytest tests/
-```
-Run Load Tests (Locust): Simulate user traffic to test API performance:
-```bash
-# 1. Start the API first
-python -m uvicorn api.main:app --reload
-
-# 2. In a separate terminal, run Locust
-locust -f locustfile.py --host=[http://127.0.0.1:8000](http://127.0.0.1:8000)
-```
-Then open http://localhost:8089 in your browser.
-
-## ⚙️ Configuration
-
-You can modify training parameters in `src/config/settings.py`.
-
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `MAX_EPOCHS` | 100 | Maximum training epochs |
-| `PATIENCE` | 10 | Early stopping patience |
-| `BATCH_SIZE` | 8192 | Batch size |
-| `CHECKPOINT_EVERY` | 10 | Checkpoint save interval |
-| `RESUME_TRAINING` | True | Resume from checkpoint |
-
-## 📊 Model Performance
-
-**Test AUC:** ~0.81
-
-**Top 5 Features:** V230, P_emaildomain, M6, id_11, V154
-
-## 📝 License
-
-MIT License
+---
+*Created by Antigravity*

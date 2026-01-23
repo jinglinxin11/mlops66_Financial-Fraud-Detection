@@ -60,12 +60,14 @@ class TabNetTrainer:
             verbose=1 if self.verbose else 0,
         )
 
-    def train(self):
+    def train(self, callbacks=None):
         """Train model (supports resuming from checkpoint).
+
+        Args:
+            callbacks: List of additional callbacks (e.g. for Gradio logging)
 
         Returns:
             TabNetClassifier: Trained model
-
         """
         self._log("\n" + "=" * 60)
         self._log("              Model Training")
@@ -140,6 +142,13 @@ class TabNetTrainer:
 
         # Train
         self._log("\nStarting training...")
+
+        
+        # Combine callbacks
+        final_callbacks = [checkpoint_callback]
+        if callbacks:
+            final_callbacks.extend(callbacks)
+
         self.model.fit(
             X_train=self.data["X_train"],
             y_train=self.data["y_train"],
@@ -153,7 +162,7 @@ class TabNetTrainer:
             weights=1,
             num_workers=0,
             drop_last=False,
-            callbacks=[checkpoint_callback],
+            callbacks=final_callbacks,
         )
 
         # Save final model
