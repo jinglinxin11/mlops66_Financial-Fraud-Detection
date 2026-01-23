@@ -607,6 +607,12 @@ One of the main struggles was managing the dependencies between the heavy traini
 > *All members contributed to code by...*
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 
-> Answer: !!!! TO DO !!!!
+> Student s214518 was in charge of setting up workflows and setting up unit tests for the source code. Furthermore, has been in charge of going through incoming pull requets and merging them with the main branch.
+> Student s234844 and s253011 was in charge of setting up FastAPI and a frontend for it. 
+>
+> Student s252646 was in charge of setting up the initial project structure and adding the necessary code for the machine learning model.
+> In addition to this s252646 set up Weights and Biases for model version control and the final API.
+>
+> Student s253011 was in charge of setting the cloud part of this project. This includes setting up the Dockerfiles an automatic build/deploy to GCP. Furthermore, set up tests for the API
 
---- question 31 fill here ---
+
