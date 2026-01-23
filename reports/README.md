@@ -340,8 +340,8 @@ We secured reproducibility by pinning exact library versions in `requirements.tx
 > *As seen in the second image we are also tracking ... and ...*
 >
 > Answer:
-!TODO LINXIN
-`![WandB Metrics](figures/wandb.png)`
+
+[WandB Metrics](figure/MLOPS_WandB.jpeg)
 
 We tracked metrics such as Training Loss, Validation AUC, and Learning Rate. The visualization helped us identify that the model converges quickly (around epoch 20) and allowed us to tune the `PATIENCE` parameter for early stopping to save resources.
 
