@@ -24,6 +24,7 @@ class FraudPreprocessor:
         Args:
             config: Configuration object
             verbose: Whether to print detailed information.
+
         """
         self.config = config
         self.verbose = verbose
@@ -123,6 +124,7 @@ class FraudPreprocessor:
 
         Returns:
             dict: Contains train/valid/test data and metadata
+
         """
         transaction_path = transaction_path or self.config.TRAIN_TRANSACTION
         identity_path = identity_path or self.config.TRAIN_IDENTITY
@@ -187,6 +189,7 @@ class FraudPreprocessor:
 
         Returns:
             dict: Contains X_test, transaction_ids
+
         """
         transaction_path = transaction_path or self.config.TEST_TRANSACTION
         identity_path = identity_path or self.config.TEST_IDENTITY

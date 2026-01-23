@@ -28,8 +28,8 @@ def trained_model(dummy_data):
     # Initialize with basic parameters
     model = TabNetClassifier(
         optimizer_fn=torch.optim.Adam,
-        optimizer_params=dict(lr=2e-2),
-        scheduler_params=dict(step_size=10, gamma=0.9),
+        optimizer_params={"lr": 2e-2},
+        scheduler_params={"step_size": 10, "gamma": 0.9},
         scheduler_fn=torch.optim.lr_scheduler.StepLR,
         mask_type="sparsemax",  # strictly enforcing a standard mask
         verbose=0,

@@ -1,0 +1,29 @@
+# Weights & Biases Hyperparameter Sweep Configuration
+# Run with: wandb sweep configs/sweep.yaml
+
+program: train.py
+method: bayes
+metric:
+  name: valid_auc
+  goal: maximize
+
+parameters:
+  model.n_d:
+    values: [32, 48, 64]
+  model.n_a:
+    values: [32, 48, 64]
+  model.n_steps:
+    values: [3, 4, 5, 6]
+  model.gamma:
+    min: 1.0
+    max: 2.0
+  model.lambda_sparse:
+    values: [0.0001, 0.001, 0.01]
+  training.learning_rate:
+    min: 0.001
+    max: 0.02
+  training.batch_size:
+    values: [4096, 8192, 16384]
+
+# Sweep settings
+count: 20  # Number of runs

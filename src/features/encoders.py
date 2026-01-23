@@ -3,6 +3,7 @@
 Handles encoding of categorical and numerical features.
 """
 
+from pandas.api.types import is_object_dtype, is_string_dtype
 from sklearn.preprocessing import LabelEncoder
 
 
@@ -15,6 +16,7 @@ class FeatureEncoder:
         Args:
             rare_category_threshold: Rare category threshold
             verbose: Whether to print information.
+
         """
         self.rare_category_threshold = rare_category_threshold
         self.verbose = verbose
@@ -43,6 +45,7 @@ class FeatureEncoder:
 
         Returns:
             list: List of feature column names
+
         """
         self._log("\n" + "=" * 50)
         self._log("Identifying Feature Types")
@@ -58,7 +61,7 @@ class FeatureEncoder:
             if col in exclude_cols:
                 continue
 
-            if df[col].dtype == "object":
+            if is_object_dtype(df[col]) or is_string_dtype(df[col]):
                 self.categorical_columns.append(col)
             elif df[col].nunique() < 50 and df[col].dtype in ["int64", "int32"]:
                 # Integer columns with fewer than 50 unique values are treated as categorical
@@ -82,6 +85,7 @@ class FeatureEncoder:
 
         Returns:
             pd.DataFrame: Processed DataFrame
+
         """
         self._log("\n" + "=" * 50)
         self._log("Handling Rare Categories")
@@ -108,6 +112,7 @@ class FeatureEncoder:
 
         Returns:
             pd.DataFrame: Encoded DataFrame
+
         """
         self._log("\n" + "=" * 50)
         self._log("Feature Encoding (Training)")
@@ -148,6 +153,7 @@ class FeatureEncoder:
 
         Returns:
             pd.DataFrame: Encoded DataFrame
+
         """
         self._log("\nEncoding features...")
 

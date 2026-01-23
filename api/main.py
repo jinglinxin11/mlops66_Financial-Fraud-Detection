@@ -65,11 +65,13 @@ def predict_test(limit: int = 5):
 
     Returns:
         Dict with count and a list of predictions.
+
     """
     ensure_loaded()
 
     proba = model.predict_proba(test_data_cache["X_test"])[:, 1]
 
+    # Return first N predictions
     out = []
     for tid, p in zip(test_data_cache["transaction_ids"][:limit], proba[:limit]):
         out.append(

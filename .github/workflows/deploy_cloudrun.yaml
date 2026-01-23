@@ -67,7 +67,6 @@ jobs:
           --region=${{ env.REGION }} \
           --platform=managed \
           --allow-unauthenticated \
-          --port=8000 \
           --set-env-vars="GCP_BUCKET=${{ env.GCP_BUCKET }}" \
           --memory=2Gi \
           --cpu=1 \

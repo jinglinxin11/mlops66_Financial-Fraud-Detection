@@ -16,6 +16,7 @@ def optimize_memory(df, verbose=True):
 
     Returns:
         pd.DataFrame: Optimized DataFrame
+
     """
     if verbose:
         print("\n" + "=" * 50)
@@ -29,6 +30,8 @@ def optimize_memory(df, verbose=True):
             df[col] = df[col].astype("float32")
         elif df[col].dtype == "int64":
             df[col] = df[col].astype("int32")
+        elif df[col].dtype == "object":
+            continue  # Skip object types
 
     after_mem = df.memory_usage(deep=True).sum() / 1024**2
 
@@ -47,6 +50,7 @@ def find_latest_checkpoint(checkpoint_dir):
 
     Returns:
         tuple: (latest checkpoint path, epoch number) or (None, 0)
+
     """
     if not os.path.exists(checkpoint_dir):
         return None, 0

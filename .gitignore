@@ -1,14 +1,39 @@
-/.ruff_cache*
-# Add ignore to ~/__pycache__ folders
+# Git Ignore for IEEE-CIS Fraud Detection Project
+
+# Python
 __pycache__/
-*.pyc
-.pytest_cache/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# Data files (Kaggle)
-data/*.csv
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
 
-# Generated outputs
-submission.csv
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
 
 # Model artifacts / checkpoints
 checkpoints/
@@ -17,28 +42,36 @@ tabnet_fraud_model.zip
 *.zip
 *.pt
 *.pth
+.ipynb_checkpoints/
 
 
-# Data directory
-data/
+# DVC - Data files tracked by DVC
+/data/*
 
-# Output files
-submission.csv
-report.html
+# Model outputs (optional, can also track with DVC)
+*.pkl
+*.joblib
 
-# Environment files
-.env
-.venv
-env/
-venv/
+# Logs
+logs/
+*.log
 
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# Weights & Biases
+wandb/
+
+# Hydra outputs
+outputs/
+multirun/
 
 # OS files
 .DS_Store
 Thumbs.db
+
+# Secrets
+.env
+*.key
+/data
+/tabnet_fraud_model.onnx
+/tabnet_fraud_model.zip
+/checkpoints
+.coverage
