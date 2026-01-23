@@ -26,13 +26,39 @@ permissions: #Suggestion from https://github.com/actions/setup-python#caching-pa
   actions: read #For using actions/checkout and actions/setup-python.
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      
+      - name: Install linting tools
+        run: |
+          pip install ruff mypy
+      
+      - name: Run ruff linting
+        run: ruff check . --output-format=github
+      
+      - name: Run ruff format check
+        run: ruff format --check .
+        continue-on-error: true
+      
+      - name: Run mypy type checking (optional)
+        run: mypy src/ --ignore-missing-imports --no-error-summary
+        continue-on-error: true
+
   pytest-test:
+    needs: lint #Ensures linting succeeds before running tests.
     runs-on: ${{ matrix.os }}
     strategy:
         fail-fast: false #Continue running all jobs even if one fails.
         matrix:
             os: ["ubuntu-latest", "windows-latest", "macos-latest"] #Testing on multiple OS' to ensure cross-platform compatibility.
-            python-version: ["3.11", "3.12", "3.13"] # Commonly used Python versions
+            python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"] # Commonly used Python versions
 
     steps:
     - name: Checkout
