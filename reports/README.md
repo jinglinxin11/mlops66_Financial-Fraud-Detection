@@ -415,10 +415,9 @@ We used **Vertex AI Custom Training** to train our TabNet model in the cloud, wh
 > **Insert 1-2 images of your GCP bucket, such that we can see what data you have stored in it.**
 > **You can take inspiration from [this figure](figures/bucket.png).**
 >
+[GCP Bucket data](figures/MLOPS_Bucket_data.png)  
 
-`![GCP Bucket data](figures/MLOPS_Bucket_data.png)`
-
-`![GCP Bucket models](figures/MLOPS_Bucket_models.png)`
+[GCP Bucket models](figures/MLOPS_Bucket_models.png)
 
 ### Question 20
 
@@ -426,9 +425,9 @@ We used **Vertex AI Custom Training** to train our TabNet model in the cloud, wh
 > **stored. You can take inspiration from [this figure](figures/registry.png).**
 >
 
-`![GCP Bucket data](figures/MLOPS_Artifact_API.png)`
+[GCP Bucket data](figures/MLOPS_Artifact_API.png)
 
-`![GCP Bucket models](figures/MLOPS_Artifact_Training.png)`
+[GCP Bucket models](figures/MLOPS_Artifact_Training.png)
 
 ### Question 21
 
@@ -436,7 +435,7 @@ We used **Vertex AI Custom Training** to train our TabNet model in the cloud, wh
 > **your project. You can take inspiration from [this figure](figures/build.png).**
 
 
-`![Cloud Build](figures/MLOPS_Cloudbuild.png)`
+[Cloud Build](figures/MLOPS_Cloudbuild.png)
 
 We initially implemented Cloud Build with a `cloudbuild.yaml` configuration file to automatically build and push Docker images to Artifact Registry on code pushes. However, we later removed this setup because we already had Docker image builds integrated into our GitHub Actions workflows (`deploy_cloudrun.yaml` and `api_tests.yaml`). Having both Cloud Build and GitHub Actions build images would have been redundant and added unnecessary complexity. We chose to keep the Docker builds in GitHub Actions to maintain all CI/CD workflows in one place, which simplifies monitoring and reduces the number of services to manage. The screenshot above shows the Cloud Build history from when we tested the implementation.
 
@@ -570,7 +569,7 @@ We implemented two significant extensions:
 >
 > Answer:
 
-`![Architecture Overview](figures/overview.png)`
+[Architecture Overview](figures/overview.png)
 
 The diagram illustrates our flow:
 1.  **Dev:** Code pushed to GitHub triggers Actions (Tests).
