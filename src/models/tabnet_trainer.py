@@ -143,7 +143,6 @@ class TabNetTrainer:
         # Train
         self._log("\nStarting training...")
 
-        
         # Combine callbacks
         final_callbacks = [checkpoint_callback]
         if callbacks:
