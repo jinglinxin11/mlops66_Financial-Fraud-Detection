@@ -534,7 +534,11 @@ We rely on the built-in monitoring tools of **Cloud Run**, which provide metrics
 >
 > Answer:
 
-We used approximately **$ ??** in credits. The primary cost driver was the GPU-enabled Compute Engine instance used for development and training. Cloud Run costs were low due to its scale-to-zero nature, and Storage costs were negligible. Working in the cloud significantly accelerated our training time compared to local CPUs.
+We used approximately **$ 0.05** in credits. The primary cost driver was the GPU-enabled Compute Engine instance used for development and training. Cloud Run costs were low due to its scale-to-zero nature, and Storage costs were negligible. Working in the cloud significantly accelerated our training time compared to local CPUs.
+
+Full cost breakdown can be seen in:
+[Billing](figures/billing.csv)
+
 
 ### Question 28
 
