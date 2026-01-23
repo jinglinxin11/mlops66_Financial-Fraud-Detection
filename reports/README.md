@@ -254,7 +254,7 @@ Our total code coverage is **67%** (574 statements covered out of 862). While th
 >
 > Answer:
 
-Yes, we strictly followed a feature-branch workflow. Direct pushes to `main` were discouraged. We created branches like `feature/readme-update` or `fix/api-bug`. We utilized GitHub Pull Requests to review code. This allowed us to run our CI pipeline (defined in `.github/workflows/codecheck.yaml`) on the code before it was merged, preventing broken code from reaching the production branch.
+Yes, we strictly followed a feature-branch workflow. Direct pushes to `main` were discouraged. We created branches like `feature/readme-update` or `fix/api-bug`. We utilized GitHub Pull Requests to review code. This allowed us to run our CI pipeline (defined in `.github/workflows/unitTests_and_lint.yaml`) on the code before it was merged, preventing broken code from reaching the production branch.
 
 ### Question 10
 
@@ -287,10 +287,18 @@ Yes, we used DVC (Data Version Control) backed by a Google Cloud Storage bucket.
 > Answer:
 
 We set up a comprehensive CI pipeline using GitHub Actions with three distinct workflows:
-1.  `codecheck.yaml`: Runs linting (Ruff/Black) to ensure code quality.
-2.  `tests.yaml`: Runs the `pytest` suite on every push.
-3.  `api_tests.yaml`: Specifically tests the API integration.
+1. `unitTests_and_lint.yaml`: Performs linting to ensure that code formatting is consistent.
+    If linting succeeds it will proceed to run the unit tests. This ensures that an unnecessary amount of time is not spent
+    on running unit tests, if the formatting isn't even correct. During unit tests, we test python versions 3.9 - 3.13 across multiple operating systems, namely latest windows, macOS, and Ubuntu.
+
+2.  `api_tests.yaml`: Specifically tests the API integration.
+
+3.  `DVC_workflow.yaml`: This runs in the case that the data should change in any way, and showcases some statistics and images
+    of the changed data.
+
     We used caching for `pip` dependencies to reduce the runtime of these actions.
+
+    [Link to a workflow](https://github.com/mlops0121/mlops66_Financial-Fraud-Detection/actions/runs/21282988924)
 
 ## Running code and tracking experiments
 
