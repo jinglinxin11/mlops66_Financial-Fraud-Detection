@@ -621,7 +621,7 @@ One of the main struggles was managing the dependencies between the heavy traini
 
 > Student s214518 was in charge of setting up workflows and setting up unit tests for the source code. Furthermore, has been in charge of going through incoming pull requets and merging them with the main branch.
 
-> Student s234844 was in charge of setting up FastAPI and a frontend for it. 
+> Student s234844 was in charge of setting up FastAPI and a frontend for it. This included implementing the main API endpoints (health check + inference), connecting the trained model pipeline for predictions, and debugging integration issues to make sure the service worked locally and in CI.
 >
 > Student s252646 was in charge of setting up the initial project structure and adding the necessary code for the machine learning model.
 > In addition to this s252646 set up Weights and Biases for model version control and the final API.
