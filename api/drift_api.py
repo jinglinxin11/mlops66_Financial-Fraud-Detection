@@ -21,7 +21,7 @@ except ImportError as e:
 
 router = APIRouter()
 
-BUCKET_NAME = "mlops66-data-bucket"
+BUCKET_NAME = "databucketmlops66"
 LOG_FILE = "inference_logs.jsonl"
 
 try:
