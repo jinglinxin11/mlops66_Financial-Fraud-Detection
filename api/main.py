@@ -1,24 +1,26 @@
 """FastAPI application for fraud detection predictions."""
 
-from fastapi import FastAPI
+from fastapi import BackgroundTasks, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from api.drift_api import log_prediction_to_gcs
+from api.drift_api import router as drift_router
 from src.config.settings import Config
 from src.features.preprocessor import FraudPreprocessor
 from src.models.tabnet_trainer import TabNetTrainer
 
 app = FastAPI(title="Fraud Detection API", version="1.0")
 
-# Enable CORS (so browser frontend can call the API)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # for demo
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Globals
+app.include_router(drift_router)
+
 config = Config()
 preprocessor = None
 model = None
@@ -26,10 +28,7 @@ test_data_cache = None
 
 
 def ensure_loaded():
-    """Ensure model + preprocessor + cached test data are loaded.
-
-    This is needed because startup events may not run in some CI/pytest setups.
-    """
+    """Ensure model + preprocessor + cached test data are loaded."""
     global preprocessor, model, test_data_cache
 
     if preprocessor is None:
@@ -57,29 +56,23 @@ def health():
 
 
 @app.post("/predict_test")
-def predict_test(limit: int = 5):
-    """Predict fraud probabilities on cached Kaggle test transactions.
-
-    Args:
-        limit: Number of predictions to return.
-
-    Returns:
-        Dict with count and a list of predictions.
-
-    """
+def predict_test(limit: int = 5, background_tasks: BackgroundTasks | None = None):
+    """Predict fraud probabilities on cached Kaggle test transactions."""
     ensure_loaded()
 
     proba = model.predict_proba(test_data_cache["X_test"])[:, 1]
 
-    # Return first N predictions
     out = []
     for tid, p in zip(test_data_cache["transaction_ids"][:limit], proba[:limit]):
-        out.append(
-            {
-                "TransactionID": int(tid),
-                "fraud_probability": float(p),
-                "is_fraud": bool(p >= 0.5),
-            }
-        )
+        pred = {
+            "TransactionID": int(tid),
+            "fraud_probability": float(p),
+            "is_fraud": bool(p >= 0.5),
+        }
+        out.append(pred)
+
+        # M27 logging (in background)
+        if background_tasks is not None:
+            background_tasks.add_task(log_prediction_to_gcs, pred, float(p))
 
     return {"count": limit, "predictions": out}
