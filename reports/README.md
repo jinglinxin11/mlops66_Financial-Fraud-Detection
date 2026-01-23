@@ -374,9 +374,8 @@ This ensures the application runs exactly the same on our local machines as it d
 > *Debugging method was dependent on group member. Some just used ... and others used ... . We did a single profiling*
 > *run of our main code at some point that showed ...*
 >
-> Answer: !!!! TO DO !!!!
 
-For local debugging, we used the VS Code debugger to step through the `preprocess.py` script. For cloud/container issues, we relied on application logs. We faced significant issues with PyTorch CUDA versions matching the container drivers, which we resolved by simplifying the Docker image to a CPU-only version for the inference API to reduce image size and complexity.
+For local debugging, we used conversations with LLM either using IDEs or web servivces. Through out the group anti-gravity, Cursor and Co-pilot where used. For cloud/container issues, we relied on application logs. We faced significant issues with PyTorch CUDA versions matching the container drivers, which we resolved by simplifying the Docker image to a CPU-only version for the inference API to reduce image size and complexity.
 
 ## Working in the cloud
 
@@ -452,7 +451,6 @@ We initially implemented Cloud Build with a `cloudbuild.yaml` configuration file
 > *We managed to train our model in the cloud using the Engine. We did this by ... . The reason we choose the Engine*
 > *was because ...*
 >
-> Answer: !!!! TO DO !!!!
 
 Yes, we trained our model in the cloud using **Vertex AI Custom Training**. We created a training Docker image (`Dockerfile.train`) with GPU support (PyTorch with CUDA 11.8), and developed `vertex_train.py` to submit custom training jobs. The training workflow uses `train_entrypoint.sh` which automatically downloads training data from our GCP bucket, executes the training script, and uploads the trained model and preprocessor back to the bucket. We chose Vertex AI over manually managing Compute Engine VMs because it provides managed infrastructure, automatic resource provisioning, better integration with our MLOps pipeline, and eliminates the need for SSH access and session management.
 
