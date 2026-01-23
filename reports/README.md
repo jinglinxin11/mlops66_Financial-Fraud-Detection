@@ -237,7 +237,9 @@ This extensive testing ensures that individual components function correctly in 
 >
 > Answer:
 
-Our total code coverage is **94%** (551 statements covered out of 585). We achieved 100% coverage on critical modules like `config`, `data`, `uncertainty`, and `models`. The few missing lines are primarily in `metrics.py` (handling edge cases in feature importance plotting) and `helpers.py`. Despite this high coverage, we remain cautious, as unit tests do not guarantee that the model learns useful patterns or that the system is immune to data drift in production.
+Our total code coverage is **67%** (574 statements covered out of 862). While this aggregate number appears lower, we achieved 100% coverage on critical modules like config, data (specifically loader.py), and uncertainty, as well as **97%** on the core model training logic (tabnet_trainer.py). The missing lines are primarily concentrated in auxiliary development tools (wandb_utils.py, profiling.py) and offline analysis scripts (dataset_statistics.py) which are not part of the critical inference path.
+
+[coverage grid](figures/coverage.png) 
 
 ### Question 9
 
@@ -619,6 +621,8 @@ One of the main struggles was managing the dependencies between the heavy traini
 > In addition to this s252646 set up Weights and Biases for model version control and the final API.
 >
 > Student s253011 was in charge of setting the cloud part of this project. This includes setting up the Dockerfiles an automatic build/deploy to GCP. Furthermore, set up tests for the API
+>
+> Student s253050 was in charge of the project documentation, authoring the majority of the report and designing the system overview. Furthermore, work on the Data Drift API to monitor and detect out-of-distribution data patterns.
 
 > We have used ChatGPT, cursor, Co-pilot, anti-gravity to help debug our code as well as writing it. Every change was reviews by the auther and then by another group member through the github code review. 
 
